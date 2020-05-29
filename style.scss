@@ -68,6 +68,7 @@ h4 {
 p {
   font-family: 'Noto Serif KR', serif;
   margin: 15px 0;
+  margin-bottom:40px;
 }
 
 a {
@@ -120,6 +121,7 @@ img {
 .date {
   font-style: italic;
   color: $gray;
+  margin-top:80px;
   margin-bottom:100px;
 }
 
@@ -275,7 +277,8 @@ nav {
 }
 
 .entry {
-  line-height:28px;
+  line-height:36px;
+  margin-top:30px;
 }
 
 .wrapper-footer {
