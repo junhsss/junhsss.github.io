@@ -104,8 +104,20 @@ h2 {
   font-size: 24px;
 }
 
+@media screen and (max-width: 640px) {
+  h2 {
+    font-size: 20px;
+  }
+}
+
 h3 {
   font-size: 20px;
+}
+
+@media screen and (max-width: 640px) {
+  h3 {
+    font-size: 18px;
+  }
 }
 
 h4 {
@@ -113,10 +125,23 @@ h4 {
   color: #666;
 }
 
+@media screen and (max-width: 640px) {
+  h4 {
+    font-size: 26px;
+  }
+}
+
 p {
   font-family: 'Noto Serif KR', serif;
   margin: 15px 0;
   margin-bottom: 40px;
+  margin-top: 40px;
+}
+
+@media screen and (max-width: 640px) {
+  p {
+    font-size: 17px;
+  }
 }
 
 a {
@@ -321,12 +346,12 @@ nav a {
 
 .post .read-more {
   text-transform: uppercase;
-  font-size: 15px;
+  font-size: 18px;
 }
 
 .entry {
   line-height: 36px;
-  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .wrapper-footer {
@@ -761,6 +786,10 @@ code {
   color: #ffffff;
   font-color: #ffffff;
   margin-bottom: 80px;
+}
+
+.image {
+  text-align: center;
 }
 
 /*# sourceMappingURL=style.css.map */
