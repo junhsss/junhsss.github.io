@@ -83,6 +83,7 @@ a {
 ul, ol {
   margin: 15px 0;
   padding-left: 30px;
+  margin-bottom: 40px;
 }
 
 ul {
@@ -293,7 +294,14 @@ footer {
   text-align: center;
 }
 
+
 // Settled on moving the import of syntax highlighting to the bottom of the CSS
 // ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start
 @import "highlights";
 @import "svg-icons";
+
+.highlight,pre.highlight{
+  background:#000000;
+  color:#ffffff;
+  font-color:#ffffff;
+  margin-bottom:80px;}
