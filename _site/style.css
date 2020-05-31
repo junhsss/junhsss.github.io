@@ -1,7 +1,7 @@
 /***************/
 /* MEYER RESET */
 /***************/
-@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap");
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -93,11 +93,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 30px;
+  font-size: 33px;
+  font-weight: 400;
+  margin-top: 50px;
 }
 
 h1 a {
   color: inherit;
+}
+
+@media screen and (max-width: 640px) {
+  h1 {
+    line-height: 1.4;
+    font-size: 30px;
+    margin-top: 60px;
+  }
 }
 
 h2 {
@@ -136,6 +146,7 @@ p {
   margin: 15px 0;
   margin-bottom: 40px;
   margin-top: 40px;
+  font-weight: 400;
 }
 
 @media screen and (max-width: 640px) {
@@ -145,6 +156,7 @@ p {
 }
 
 a {
+  font-weight: 200;
   color: #4183C4;
   text-decoration: none;
   cursor: pointer;
@@ -155,6 +167,7 @@ a:hover, a:active {
 }
 
 ul, ol {
+  font-family: 'Noto Serif KR', serif;
   margin: 15px 0;
   padding-left: 30px;
   margin-bottom: 40px;
@@ -194,9 +207,15 @@ img {
 
 .date {
   font-style: italic;
-  color: #666;
-  margin-top: 80px;
+  font-family: 'Noto Serif KR', serif;
+  color: #000000;
+  font-weight: 900;
+  font-size: 18px;
+  margin-top: 50px;
   margin-bottom: 100px;
+  margin-right: 0px;
+  margin-left: 10px;
+  text-align: right;
 }
 
 ::-moz-selection {
@@ -280,13 +299,15 @@ img {
 
 .site-description {
   margin: -5px 0 0 0;
-  color: #666;
   font-size: 16px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
 }
 
 @media screen and (max-width: 640px) {
   .site-description {
     margin: 3px 0;
+    margin-bottom: 40px;
   }
 }
 
@@ -321,8 +342,14 @@ nav a {
   }
 }
 
+.posts {
+  margin-bottom: 30px;
+  margin-top: 0px;
+}
+
 .posts > .post {
-  padding-bottom: 2em;
+  padding-bottom: 30px;
+  padding-top: 0px;
   border-bottom: 1px solid #eee;
 }
 
