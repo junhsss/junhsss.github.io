@@ -173,6 +173,13 @@ ul, ol {
   margin-bottom: 40px;
 }
 
+@media screen and (max-width: 640px) {
+  ul, ol {
+    font-weight: 600;
+    font-size: 17px;
+  }
+}
+
 ul {
   list-style-type: disc;
 }
@@ -307,7 +314,7 @@ img {
 @media screen and (max-width: 640px) {
   .site-description {
     margin: 3px 0;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
   }
 }
 
