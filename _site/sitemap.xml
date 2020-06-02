@@ -46,19 +46,4 @@
     </url>
     
   
-    
-    <url>
-      <loc>http://localhost:4000/model-based-rl/</loc>
-      
-        <lastmod>2020-05-28T00:00:00+09:00</lastmod>
-      
-      
-        <changefreq>monthly</changefreq>
-      
-      
-        <priority>0.5</priority>
-      
-    </url>
-    
-  
 </urlset>
