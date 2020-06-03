@@ -1,61 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>강화 학습 이야기 2 – JunHyoung Ryu's Blog</title>
-
-        <meta charset="utf-8" />
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
-
-    
-    <meta name="description" content="미래에 받을 수 있는 누적 보상의 기댓값이라니. 도대체 이게 무슨 탁상 공론인가? 가능한 미래들을 전부 열거해 보기라도 하겠다는 말인가? 지난 이야기를 읽으며 이런 생각이 들었다면 정상이다. 가치 함수가 바로 그렇게 정의되는 양이다. 정책 \(\pi\)가 어떤 행동을 해야 하는지 알려준다면 가치 함수는 그러한 행동 이후에 얼마만큼의 누적 보상을 기대할 수 있는지 알려준다.
-" />
-    <meta property="og:description" content="미래에 받을 수 있는 누적 보상의 기댓값이라니. 도대체 이게 무슨 탁상 공론인가? 가능한 미래들을 전부 열거해 보기라도 하겠다는 말인가? 지난 이야기를 읽으며 이런 생각이 들었다면 정상이다. 가치 함수가 바로 그렇게 정의되는 양이다. 정책 \(\pi\)가 어떤 행동을 해야 하는지 알려준다면 가치 함수는 그러한 행동 이후에 얼마만큼의 누적 보상을 기대할 수 있는지 알려준다.
-" />
-    
-    <meta name="author" content="JunHyoung Ryu's Blog" />
-
-    
-    <meta property="og:title" content="강화 학습 이야기 2" />
-    <meta property="twitter:title" content="강화 학습 이야기 2" />
-    
-
-    <!--[if lt IE 9]>
-      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <link rel="stylesheet" type="text/css" href="/style.css" />
-    <link rel="alternate" type="application/rss+xml" title="JunHyoung Ryu's Blog - zero-calorie ideas." href="/feed.xml" />
-
-    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
-  </head>
-
-  <body>
-    <div class="wrapper-masthead">
-      <div class="container">
-        <header class="masthead clearfix">
-          <a href="/" class="site-avatar"><img src="/images/jekyll-logo.png" /></a>
-
-          <div class="site-info">
-            <h1 class="site-name"><a href="/">JunHyoung Ryu's Blog</a></h1>
-            <p class="site-description">zero-calorie ideas.</p>
-          </div>
-
-          <nav>
-            <a href="/about">About</a>
-          </nav>
-        </header>
-      </div>
-    </div>
-
-    <div id="main" role="main" class="container">
-      <article class="post">
-  <h1>강화 학습 이야기 2</h1>
-
-
-  <div class="entry">
-    <p>미래에 받을 수 있는 누적 보상의 기댓값이라니. 도대체 이게 무슨 탁상 공론인가? 가능한 미래들을 전부 열거해 보기라도 하겠다는 말인가? <a href="/rl-story-1/">지난 이야기</a>를 읽으며 이런 생각이 들었다면 정상이다. 가치 함수가 바로 그렇게 정의되는 양이다. 정책 \(\pi\)가 어떤 행동을 해야 하는지 알려준다면 가치 함수는 그러한 행동 이후에 얼마만큼의 누적 보상을 기대할 수 있는지 알려준다.</p>
+I"j2<p>미래에 받을 수 있는 누적 보상의 기댓값이라니. 도대체 이게 무슨 탁상 공론인가? 가능한 미래들을 전부 열거해 보기라도 하겠다는 말인가? <a href="/rl-story-1/">지난 이야기</a>를 읽으며 이런 생각이 들었다면 정상이다. 가치 함수가 바로 그렇게 정의되는 양이다. 정책 \(\pi\)가 어떤 행동을 해야 하는지 알려준다면 가치 함수는 그러한 행동 이후에 얼마만큼의 누적 보상을 기대할 수 있는지 알려준다.</p>
 
 <p><a href="/rl-story-1/">지난 이야기</a>에서는 정책 \(\pi\)의 행동을 교정하기 위해 가치 함수를 소개했다. 그러나 잘 생각해보자. 가치 함수로 어떤 행동이 얼마나 좋은지 어림할 수 있다면 굳이 정책을 별도로 가지고 있을 필요가 없다. 가치 함수만으로도 해야 할 행동이 무엇인지 충분히 추론할 수 있다. 가장 높은 누적 보상을 기대할 수 있는 행동을 하면 된다. 그러니 가치 함수에 대체로 더 많은 정보량이 들어있다고 생각해도 좋다.</p>
 
@@ -90,11 +33,11 @@
 
 <h2 id="천지-개벽">천지 개벽</h2>
 
-<p>\(Q^{\pi}(s_t, a_t)\)를 추정하고 싶다면 이 길고 긴 사슬과 같은 데이터는 행위자가 만들었어야 한다고 강조했다. 그러나 행위자가 데이터에 개입한 흔적은 \(a_{t+1}\)부터 드러난다. 그러니 그 전까지는 행위자와 무관한 데이터다. 만약 \(Q^{\pi}\)를 학습시키기 위한 어떤 방법론이 \(a_{t+1}\) 이후의 데이터를 요구하지 않는다면 이론 상 행위자와 무관한 데이터로도 학습이 가능하다. 대단히 중요한 관찰이다. 천지가 개벽할 일이다. 정책 \(\pi\)의 가치 함수를 \(\pi\)의 흔적이 없는 데이터로도 알아낼 수 있다니. 철수가 만드는 가치를 영희의 행동만으로 알아낼 수 있다니! 영리한 독자라면 의구심이 들어야 정상이다. 이 이야기가 등장하려면 조금 더 기다려야 한다. 그러니 잠깐 잊고 원래 이야기를 이어가자.</p>
+<p>\(Q^{\pi}(s_t, a_t)\)를 추정하고 싶다면 이 길고 긴 사슬과 같은 데이터는 행위자가 만들었어야 한다고 강조했다. 그러나 행위자가 데이터에 개입한 흔적은 \(a_{t+1}\)부터 드러난다. 그러니 그 전까지는 행위자와 무관한 데이터다. 만약 \(Q^{\pi}\)를 학습시키기 위한 어떤 방법론이 \(a_{t+1}\) 이후의 데이터를 요구하지 않는다면 이론 상 행위자와 무관한 데이터로도 학습이 가능하다. 대단히 중요한 관찰이다. 천지가 개벽할 일이다. \(Q^{\pi}\)는 정책 \(\pi\)의 가치 함수인데 \(\pi\)의 흔적이 없는 데이터로도 알아낼 수 있다니. 철수가 만드는 가치를 영희의 행동만으로 알아낼 수 있다니! 영리한 독자라면 의구심이 들어야 정상이다. 이 이야기가 등장하려면 아직 기다려야 한다. 잠깐 잊고 원래 이야기를 이어가자.</p>
 
 <h2 id="배우-수업">배우 수업</h2>
 
-<p><a href="/rl-story-1/">지난 이야기</a>에서 말했듯이 가치 함수 \(Q^{\pi}\)를 알고 있다면 행위자의 정책 \(\pi\)를 교정할 때 각 행동들의 기여도를 더 합리적으로 판단할 수 있다. 이를 알고리즘으로 써 보자.</p>
+<p><a href="/rl-story-1/">지난 이야기</a>에서 말했듯이 가치 함수 \(Q^{\pi}\)를 알고 있다면 행위자의 정책 \(\pi\)를 교정할 때 더 나은 기여도 할당을 할 수 있다. 이를 알고리즘으로 써 보자.</p>
 
 <ol>
   <li>정책 \(\pi\)를 이용해 데이터를 모은다.</li>
@@ -102,7 +45,7 @@
   <li>추정한 가치함수 \(Q^{\pi}\)를 근거로 정책 \(\pi\)의 행동을 교정한다.</li>
 </ol>
 
-<p>그런데 3단계에서 정책 \(\pi\)가 조금이라도 변하는 순간 가치 함수 \(Q^{\pi}\)는 무용지물이 된다. 정책이 변했으니 가치 함수를 다시 찾아야 한다. 절망적이다. 그래도 경사 하강법은 정책을 크게 바꾸지 않으니 다행이다. 덕분에 \(\pi\)와 \(Q^{\pi}\)를 한 번씩 번갈아 학습시키기만 해도 충분하다. 바뀌기 전 정책에 대한 가치 함수를 초깃값 삼아 바뀐 후의 정책에 대한 가치 함수를 찾는 셈이다. 이런 미묘한 부분들까지 꼼꼼히 짚고 넘어가야 안 헷갈린다.</p>
+<p>그런데 3단계에서 정책 \(\pi\)가 살짝이라도 변하는 순간 가치 함수 \(Q^{\pi}\)는 무용지물이 된다. 변해버린 정책의 가치 함수를 다시 찾아야 한다. 절망적이다. 그래도 경사 하강법은 정책을 크게 바꾸지 않으니 다행이다. 그냥 \(\pi\)와 \(Q^{\pi}\)를 한 번씩 번갈아 학습시키면 충분하다. 바뀌기 전 정책에 대한 가치 함수를 초깃값 삼아 바뀐 후의 정책에 대한 가치 함수를 찾는 셈이다. 이런 미묘한 부분들까지 꼼꼼히 짚고 넘어가야 안 헷갈린다.</p>
 
 <p>정책 \(\pi\)와 가치 함수 \(Q^{\pi}\)을 표현하는데는 독립된 두 신경망을 사용한다. 그러니 태생적으로 불안정 할 수 밖에 없다. 지난 이야기에서 논했던대로 \(V^{\pi}\) 까지 있다면 더 나은 신뢰 할당을 할 수 있다. 세 번째 신경망을 도입하면 된다. \(V^{\pi}\)를 표현하는 신경망을 어떻게 학습시킬지는 스스로 생각해보자. \(Q^{\pi}\)와 크게 다르지 않다.</p>
 
@@ -132,89 +75,7 @@
 
 <p>신경망을 \(Q^{\pi}\) 따로 \(V^{\pi}\) 따로 사용할 수 없으니 Advantage의 근사로서는 일반적으로 \(r_t + V^{\pi}(s_{t+1}) - V^{\pi}(s_{t})\)를 사용한다고 했다. 이를 조금 더 일반화하여 여러 방식으로 Advantage를 표현할 수 있다. 관심있는 독자는 <a href="https://arxiv.org/abs/1506.02438">GAE</a>를 읽어보면 좋다. 이후 맥락에서 \({\hat{A_t}}\)라는 기호가 나온다면 무언가 한 가지 방법으로 Advantage를 추정한 값이라 이해하면 된다.</p>
 
-<p>가치 함수를 도입했다고 지난 이야기의 말미에 등장했던 문제점들이 해결되는건 아니다. 받는 보상이 없으면 정답도 항상 \(0\)이다. 그러면 가치 함수는 \(0\)을 뱉는 방법을 학습한다. 진정한 무가치 함수로 거듭난다. 쇼펜하우어가 따로 없다. 혹시 무가치 함수가 필요하다면 시도해 보자.</p>
+<p>가치 함수를 도입했다고 지난 이야기의 말미에 등장했던 문제점들이 해결되는건 물론 아니다. 받는 보상이 없으면 정답은 항상 \(0\)이다. 그러면 가치 함수는 \(0\)을 뱉는 방법을 학습해 진정한 무가치 함수로 거듭난다. 쇼펜하우어가 따로 없다. 혹시 무가치 함수가 필요하다면 시도해 보자.</p>
 
-  </div>
-
-  <div class="date">
-    20년 6월의 기록
-  </div>
-
-
-  
-<div class="comments">
-	<div id="disqus_thread"></div>
-	<script type="text/javascript">
-
-	    var disqus_shortname = 'junhsss-github-io';
-
-	    (function() {
-	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	    })();
-
-	</script>
-	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-
-
-  
-    <div id="disqus_thread"></div>
-    <script>
-
-      /**
-      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-      var disqus_config = function () {
-        this.page.url = "http://localhost:4000/rl-story-2/";
-        this.page.identifier = "강화 학습 이야기 2";
-      };
-
-      (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = 'https://junhsss-github-io.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                                
-  
-</article>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-    </div>
-    <!--
-    <div class="wrapper-footer">
-      <div class="container">
-        <footer class="footer">
-          
-
-
-
-<a href="https://github.com/barryclark/jekyll-now"><i class="svg-icon github"></i></a>
-
-
-
-
-<a href="https://www.twitter.com/jekyllrb"><i class="svg-icon twitter"></i></a>
-
-
-
-        </footer>
-      </div>
-    </div>
-    -->
-
-    
-
-  </body>
-</html>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+<p>다음 이야기에서는 가치 함수를 학습시키는 또 다른 방법에 대해 논한다. 지루하지만 천지 개벽 이야기를 하기 위한 준비 단계라고 생각하자.</p>
+:ET
