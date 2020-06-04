@@ -402,6 +402,11 @@ footer {
   text-align: center;
 }
 
+.caption {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 17px;
+}
+
 .highlight {
   background-color: #efefef;
   padding: 7px 7px 7px 10px;
