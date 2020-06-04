@@ -1,61 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>강화 학습 이야기 3 – JunHyoung Ryu's Blog</title>
-
-        <meta charset="utf-8" />
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
-
-    
-    <meta name="description" content="가치 함수에는 강력한 재귀적 구조가 존재한다. 흙먼지 아래에 방치하는건 낭비다. 심미적 관점에서도 틀리다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.
-" />
-    <meta property="og:description" content="가치 함수에는 강력한 재귀적 구조가 존재한다. 흙먼지 아래에 방치하는건 낭비다. 심미적 관점에서도 틀리다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.
-" />
-    
-    <meta name="author" content="JunHyoung Ryu's Blog" />
-
-    
-    <meta property="og:title" content="강화 학습 이야기 3" />
-    <meta property="twitter:title" content="강화 학습 이야기 3" />
-    
-
-    <!--[if lt IE 9]>
-      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <link rel="stylesheet" type="text/css" href="/style.css" />
-    <link rel="alternate" type="application/rss+xml" title="JunHyoung Ryu's Blog - zero-calorie ideas." href="/feed.xml" />
-
-    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
-  </head>
-
-  <body>
-    <div class="wrapper-masthead">
-      <div class="container">
-        <header class="masthead clearfix">
-          <a href="/" class="site-avatar"><img src="/images/jekyll-logo.png" /></a>
-
-          <div class="site-info">
-            <h1 class="site-name"><a href="/">JunHyoung Ryu's Blog</a></h1>
-            <p class="site-description">zero-calorie ideas.</p>
-          </div>
-
-          <nav>
-            <a href="/about">About</a>
-          </nav>
-        </header>
-      </div>
-    </div>
-
-    <div id="main" role="main" class="container">
-      <article class="post">
-  <h1>강화 학습 이야기 3</h1>
-
-
-  <div class="entry">
-    <p>가치 함수에는 강력한 재귀적 구조가 존재한다. 흙먼지 아래에 방치하는건 낭비다. 심미적 관점에서도 틀리다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.</p>
+I"�G<p>가치 함수에는 강력한 재귀적 구조가 존재한다. 흙먼지 아래에 방치하는건 낭비다. 심미적 관점에서도 틀리다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.</p>
 
 <p>상황에 대한 가치함수 \(V^{\pi}\)를 생각해보자. 행위자가 상황 \(s\)에서 행동 \(a\)를 하면 보상 \(r\)를 받고 \(s'\)라는 상황에 놓인다. 원래 상황의 가치 \(V^{\pi}(s)\)와 바뀐 상황의 가치 \(V^{\pi}(s')\) 사이에는 어떤 관계가 존재할까? 두 상태가 시간적으로 매우 가까우므로 크게 다르다면 어색하다. 현재 상황에서 보상 \(r\)을 받고 다음 상황 \(s'\)로 넘어갔으니 이렇게 쓸 수 있다.</p>
 
@@ -114,7 +57,7 @@
 
 <p>이 단락은 역사적 배경에 불과하니 잊어도 좋다. 일반적으로 쓰는 방법론은 시간차 학습이다. 시간차 학습이 등장한 배경을 소개하고 싶었다.</p>
 
-<h2 id="파블로프의-개">파블로프의 개</h2>
+<h2 id="시간을-건너">시간을 건너</h2>
 
 <p>첫 단락에서 이어진다. \(V^{\pi}(s)\)와 \(r + V^{\pi}(s')\)는 비슷해야 한다.</p>
 
@@ -123,6 +66,8 @@
 <p>머릿속의 행복 추산기가 아직 미숙한 상태라고 해 보자. 가령 \(V^{\pi}(s)=12\) 이었고, 하루가 지난 오늘 다시 따져 보았을 때 \(r=1\), \(V^{\pi}(s')=10\) 이라 해 보자. \(12&gt;1+10\) 이니 모르긴 몰라도 어제의 나는 너무 순진했다. 오늘 다시 생각해 보았을 때, 이 각박한 세상에서 어제의 나는 조금은 비관적이어야 할 필요가 있다. \(V^{\pi}(s)\)가 약간 작아지도록 행복 추산기를 살짝 건드린다. 내일의 내가 오늘의 나를 교정한다.</p>
 
 <p>행복 추산기가 미숙한 상태이기 때문에 \(V^{\pi}(s')=10\) 자체가 정확한 값이 아님에도 이를 신뢰하여 교정한다는 점이 재밌다. 이러한 아이디어는 강화 학습에서 시간차 학습 (Temporal Difference Learning) 이라는 이름으로 등장한다. 개인적으로는 자기 참조 학습 (Self-Referential Learning) 이라는 이름이 더 적절하지 않을까 싶다. 리처드 서튼의 말을 빌리자면 시간차 학습은 강화학습에서 등장하는 가장 신박하고 중요한 아이디어란다. 맞는 말이다. 가치 함수가 나오는 맥락이라면 시간차 학습은 무조건 등장한다.</p>
+
+<p>다음 상태의 가치 함수와 보상이 이전 상태의 가치 함수로 전파된다. 도파민의 자극 전파가 이렇게 일어난다. 인지과학에서는 <a href="https://www.jneurosci.org/content/jneuro/16/5/1936.full.pdf">오래 전 부터 알려져 있던 결과</a>이다. <a href="http://www.princeton.edu/~ndaw/dt.pdf">읽어</a> [보면] (https://www.pnas.org/content/108/Supplement_3/15647) <a href="https://deepmind.com/blog/article/Dopamine-and-temporal-difference-learning-A-fruitful-relationship-between-neuroscience-and-AI">재밌는 이야기들</a>이다.</p>
 
 <p>일찍이 마빈 민스키는 본인의 저서 <a href="http://aurellem.org/society-of-mind/som-17.1.html">마음의 사회</a> (1991) 에서 인간의 발달 과정은 자기 자신을 가르치는 과정의 반복이라는 이야기를 한 바 있다. 완전히 다른 주제이긴 하지만, 같은 이야기가 Knowledge Distillation의 맥락에서도 등장한다는게 재밌다. 최근까지 Imagenet 분류의 <a href="https://arxiv.org/abs/1911.04252">왕좌를 차지했던 방법론</a>에서도 자가 학습의 아이디어를 차용하고 있다.</p>
 
@@ -136,17 +81,33 @@
 
 <p>\(V^{\pi}\)를 표현하는 신경망을 시간차 학습으로 추정하기 위해 필요한 데이터는 \((s,\ r,\ s')\) 이다. 가치 함수는 정책 \(\pi\)에 종속되는 양이라고 했다. 이 데이터 어디에서 정책에 대한 종속성을 확인할 수 있는가? 헷갈리게도 데이터에 직접적으로 드러나진 않는다. 데이터를 수집하는 과정을 생각해보자. 행위자는 상황 \(s\)에서 정책 \(\pi\)에 따라 \(a\)를 결정한다. \(s\)에서 행위자의 판단으로 \(a\)을 했기 때문에 \(r\)을 받고 \(s'\)에 놓인다. 결국 \(s'\)는 정책의 영향을 받아 관측된 데이터이다. 강조한다. \((s,\ r,\ s')\)는 가치 함수를 추정하고 싶은 정책 \(\pi\)로 모은 데이터여야만 한다. 만약 그렇지 않았다면? \(\pi\)가 아닌 이 데이터를 모은 미지의 정책 \(\pi ^{\beta}\)에 대한 가치 함수를 추정하는 꼴이 되어버린다. 가치 함수를 추정하기 위한 데이터를 모을 때 정책이 어디에서 어떻게 개입하는지 명확히 이해하자. <a href="/rl-story-2/">이전 이야기</a>에서도 강조했다.</p>
 
-<p>가치 함수를 신경망 등을 이용해 표현하려는 상황에서 시간차 학습이 발산할 수 있다는 사실은 <a href="https://www.mit.edu/~jnt/Papers/J063-97-bvr-td.pdf">오래전부터 알려져 있던 사실</a>이다. <a href="https://arxiv.org/abs/1812.02648">어떤 이유</a>로 <a href="https://arxiv.org/abs/1903.08894">그렇게 되는지</a>는 나중에 이야기 해 볼 생각이다. 그러나 일반적으로 가치 함수를 추정할 때는 거의 항상 시간차 학습을 이용한다. 먼 미래가 아닌 단 한 단계의 미래만을 고려하기 때문에 분산이 낮은 덕이다. (사족: 반드시 한 단계 미래와의 관계만을 볼 필요는 없다. 정의를 조금 더 만지면 일반적으로 \(n\)단계 미래와의 관계를 보도록 변형할 수 있다. 자주 쓰이는 테크닉이다.)</p>
+<p>가치 함수를 신경망 등을 이용해 표현하려는 상황에서 시간차 학습이 발산할 수 있다는 사실은 <a href="https://www.mit.edu/~jnt/Papers/J063-97-bvr-td.pdf">오래전부터 알려져 있던 사실</a>이다. 어떤 이유로 그렇게 되는지는 나중에 이야기 해 볼 생각이다. 그러나 일반적으로 가치 함수를 추정할 때는 거의 항상 시간차 학습을 이용한다. 먼 미래가 아닌 단 한 단계의 미래만을 고려하기 때문에 분산이 낮은 덕이다. (사족: 반드시 한 단계 미래와의 관계만을 볼 필요는 없다. 정의를 조금 더 만지면 일반적으로 \(n\)단계 미래와의 관계를 보도록 변형할 수 있다. 자주 쓰이는 테크닉이다.)</p>
 
-<p>오차의 순서를 바꾸어 써 보자.</p>
+<h2 id="헬리콥터-부모">헬리콥터 부모</h2>
 
-\[\left[ V^{\pi}(s) - (r + V^{\pi}(s')) \right]^2\]
+<p>정책 \(\pi\)의 행동을 교정하기 위해 가치 함수 \(Q^{\pi}(s, a)\)와 \(V^{\pi}(s)\)를 소개했다. 낭비를 줄이기 위해 \(V^{\pi}\)만 이용하기로 했다. 그래서 \(V^{\pi}\)를 시간차 학습으로 추정하는 방법에 대해 이야기했다. \(Q^{\pi}(s, a)\) 역시 시간차 학습으로 추정할 수 있다.</p>
 
-\[= \left[ (V^{\pi}(s) - V^{\pi}(s')) - r) \right]^2\]
+\[Q^{\pi}(s, a) \approx r + Q^{\pi}(s', a')\]
 
-<p>내가 기대한 자극 \(V^{\pi}(s) - V^{\pi}(s')\)와 실제 받은 자극 \(r\)의 간극이 줄어들도록 나의 기대를 바꾸어 나간다. 전형적인 조건 형성이다. 그래서인지 시간차 학습은 조건 형성을 설명하는 심리학의 레스콜러-와그너 모형과 놀랍도록 닮아 있다.</p>
+<p>필요한 데이터는 \((s,\ a,\ r,\ s',\ a')\)다. 행위자가 개입한 흔적은 \(a'\)에서만 드러난다. 지난 이야기에서 꼼꼼히 따져 봤다.</p>
 
-<p>다음 상태의 가치 함수와 보상이 이전 상태의 가치 함수로 전파된다. 도파민의 전파가 이렇게 일어난다고 한다. 기대한 자극과 실제 받은 자극이 다르면 다를수록 더 빠른 전파가 일어날테다. 중뇌에 작은 부분에서 생성되는 도파민이 멀리까지 전파될 수 있는 이유이다. 신경 과학에서는 <a href="https://www.jneurosci.org/content/jneuro/16/5/1936.full.pdf">오래 전부터 알려져 있던 결과</a>이다. <a href="http://www.princeton.edu/~ndaw/dt.pdf">읽어</a>보면 <a href="https://www.pnas.org/content/108/Supplement_3/15647">재밌</a>는 <a href="https://deepmind.com/blog/article/Dopamine-and-temporal-difference-learning-A-fruitful-relationship-between-neuroscience-and-AI">이야기들</a>이다.</p>
+<p>그러나 잘 생각해보자. 가치 함수 \(Q^{\pi}\)만 가지고도 해야 할 행동이 무엇인지 충분히 추론할 수 있다. 가장 높은 누적 보상을 기대할 수 있는 행동을 하면 된다. 그러나 그렇게 행동하는 정책은 \(Q^{\pi}\)를 정의하는 정책 \(\pi\)와 다르다는 점이 재밌다.</p>
+
+<p>가능한 행동이 \(a_1\)와 \(a_2\) 뿐이고 \(Q^{\pi}(s, a_1)\) \(&gt;\) \(Q^{\pi}(s, a_2)\)라 하자. 정책 \(\pi\)는 \(s\)에서 \(a_1\)와 \(a_2\) 중 무엇을 선호할까? 모른다. \(\pi\)는 \(a_2\)를 더 선호할 수도 있다. 그러나 만약 우리가 행동을 강제할 수 있다면 당연히 \(a_1\)를 고른다. 물론 \(a_1\)가 정말로 좋은 행위인지는 모른다. 적어도 그 이후에 \(\pi\)에 따라 행동한다면 \(a_1\)를 하는게 가장 좋다는 말이다.</p>
+
+<p>전형적인 부모 자식의 관계다. 부모는 자식의 정책 \(\pi\)의 가치 \(Q^{\pi}(s, a)\)를 추산하려 무던히도 노력한다. 자식 \(\pi\)에게 \(Q^{\pi}\)가 가장 높은 행동들만 할 것을 강요한다. 부모의 명령을 따라 행동하는 것이 자식의 새로운 정책 \(\pi'\)가 된다. 부모는 \(Q^{\pi'}(s, a)\)를 추산해 다시금 자식의 행동을 교정한다.</p>
+
+<p>이러한 방법론을 살사라 부른다. \(Q^{\pi}\)를 시간차 학습으로 추정하기 위해 필요한 데이터를 그대로 읽은 펀치라인이다. 이를 알고리즘으로 써 보자.</p>
+
+<ol>
+  <li>\(Q^{\pi}(s, a)\)를 가장 크게 만드는 행동만을 하는 새로운 정책 \(\pi'\)를 이용해 데이터를 모은다.</li>
+  <li>\(\pi'\)의 가치함수 \(Q^{\pi'}(s, a)\)를 추정한다.</li>
+  <li>\(\pi\) \(\leftarrow\) \(\pi'\)</li>
+</ol>
+
+<p>정책 \(\pi'\)를 표현하는 신경망 따위가 없다는 것에 주목하자. 이전 정책의 가치 함수 \(Q^{\pi}\)가 간접적으로 \(\pi'\)를 정의한다. 마찬가지로 \(\pi'\)의 가치 함수 \(Q^{\pi'}\)는 새로운 정책 \(\pi''\)을 정의한다. 반복한다.</p>
+
+<p>일부러 비극적인 비유를 들어 보았다. 살사는 현실적으로 사용하는 방법론이 아니기 때문이다. 부모의 판단에 의존하는 자식의 삶은 불행하다. 더 나은 방법론은 다음 이야기에서 다룬다.</p>
 
 <h2 id="카르페-디엠">카르페 디엠</h2>
 
@@ -159,88 +120,4 @@
 \[= \mathbb{E}_{\pi} \left[ r + \gamma V^{\pi}(s') \mid s_t = s \right]\]
 
 <p>\(\gamma\)는 \(0.99\)처럼 \(1\)에 가까운 값으로 설정한다. 직관적으로는 \(\frac{1}{1-\gamma}\)만큼 떨어진 미래까지의 보상만 고려한다고 받아들이자. \(\gamma\)는 원론적으로 사람이 정해주는 값이 아닌 문제 정의의 일부이나 현실적으로는 하이퍼 파라미터 취급을 받아 막 굴려지는 안타까운 녀석이다. 먼 미래까지 고려하는 문제보다 가까운 미래까지 고려하는 문제가 쉽다. 그래서 가끔 구현체를 보다 보면 \(\gamma\)를 \(0.5\)처럼 낮은 값으로 설정해 놓곤 점점 늘려나가는 통밥을 볼 때도 있다. 먼 미래를 무시할 수 있게 해주는 특성상 <a href="https://arxiv.org/abs/1506.02438">분산 감소를 위한 하이퍼 파라미터 취급을 받는 경우</a>도 있고, 메타 학습으로 아예 <a href="https://arxiv.org/abs/1805.09801">적절한 값을 학습 당하는 경우</a>도 있다. 57개의 Atari 2600 게임에서 모두 인간을 깨부쉈다는 Deepmind의 <a href="https://deepmind.com/blog/article/Agent57-Outperforming-the-human-Atari-benchmark">Agent57</a>에도 이런 아이디어가 구현되어 있다. 다음 이야기부터는 \(\gamma = 0.99\) 쯤으로 고정된 상수라고 생각하자.</p>
-
-  </div>
-
-  <div class="date">
-    20년 6월의 기록
-  </div>
-
-
-  
-<div class="comments">
-	<div id="disqus_thread"></div>
-	<script type="text/javascript">
-
-	    var disqus_shortname = 'junhsss-github-io';
-
-	    (function() {
-	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	    })();
-
-	</script>
-	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-
-
-  
-    <div id="disqus_thread"></div>
-    <script>
-
-      /**
-      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-      var disqus_config = function () {
-        this.page.url = "http://localhost:4000/rl-story-3/";
-        this.page.identifier = "강화 학습 이야기 3";
-      };
-
-      (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = 'https://junhsss-github-io.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                                
-  
-</article>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-    </div>
-    <!--
-    <div class="wrapper-footer">
-      <div class="container">
-        <footer class="footer">
-          
-
-
-
-<a href="https://github.com/barryclark/jekyll-now"><i class="svg-icon github"></i></a>
-
-
-
-
-<a href="https://www.twitter.com/jekyllrb"><i class="svg-icon twitter"></i></a>
-
-
-
-        </footer>
-      </div>
-    </div>
-    -->
-
-    
-
-  </body>
-</html>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+:ET
