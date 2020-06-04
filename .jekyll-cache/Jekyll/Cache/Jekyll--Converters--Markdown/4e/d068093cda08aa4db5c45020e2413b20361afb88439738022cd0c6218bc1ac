@@ -1,4 +1,4 @@
-I"�?<p>가치 함수에는 강력한 재귀적 구조가 존재한다. 흙먼지 아래에 방치하기엔 아까운 구조다. 심미적 관점에서도 틀리다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.</p>
+I"�?<p>가치 함수에는 강력한 재귀적 구조가 존재한다. 흙먼지 아래에 방치하기엔 아까운 구조다. 심미적 관점에서도 틀리다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.</p>
 
 <p>상황에 대한 가치함수 \(V^{\pi}\)를 생각해보자. 행위자가 상황 \(s\)에서 행동 \(a\)를 하면 보상 \(r\)를 받고 \(s'\)라는 상황에 놓인다. 원래 상황의 가치 \(V^{\pi}(s)\)와 바뀐 상황의 가치 \(V^{\pi}(s')\) 사이에는 어떤 관계가 존재할까? 두 상태가 시간적으로 매우 가까우므로 크게 다르다면 어색하다. 현재 상황에서 보상 \(r\)을 받고 다음 상황 \(s'\)로 넘어갔으니 이렇게 쓸 수 있다.</p>
 
@@ -89,7 +89,7 @@
 
 <p>내가 기대한 자극 \(V^{\pi}(s) - V^{\pi}(s')\)와 실제 받은 자극 \(r\)의 간극이 줄어들도록 나의 기대를 바꾸어 나간다. 전형적인 조건 형성이다. 그래서인지 시간차 학습은 조건 형성을 설명하는 심리학의 레스콜러-와그너 모형과 놀랍도록 닮아 있다.</p>
 
-<p>다음 상태의 가치 함수와 보상이 이전 상태의 가치 함수로 전파된다. 도파민이 전파되는 매커니즘이라고 한다. 기대한 자극과 실제 받은 자극이 다르면 다를수록 더 빠른 전파가 일어날테다. 중뇌에 작은 부분에서 생성되는 도파민이 멀리까지 전파될 수 있는 이유이다. 신경 과학에서는 <a href="https://www.jneurosci.org/content/jneuro/16/5/1936.full.pdf">오래 전부터 알려져 있던 결과</a>이다. <a href="http://www.princeton.edu/~ndaw/dt.pdf">읽어</a>보면 <a href="https://www.pnas.org/content/108/Supplement_3/15647">재밌</a>는 <a href="https://deepmind.com/blog/article/Dopamine-and-temporal-difference-learning-A-fruitful-relationship-between-neuroscience-and-AI">이야기들</a>이다.</p>
+<p>다음 상태의 가치 함수에 보상을 더한 정보가 이전 상태의 가치 함수로 전파된다. 도파민이 전파되는 원리라고 한다. 기대한 자극과 실제 받은 자극이 다르면 다를수록 더 빠른 전파가 일어날테다. 중뇌의 작은 부분에서 생성되는 도파민이 멀리까지 전파될 수 있는 이유이다. 신경 과학에서는 <a href="https://www.jneurosci.org/content/jneuro/16/5/1936.full.pdf">오래 전부터 알려져 있던 사실</a>이다. <a href="http://www.princeton.edu/~ndaw/dt.pdf">읽어</a>보면 <a href="https://www.pnas.org/content/108/Supplement_3/15647">재밌</a>는 <a href="https://deepmind.com/blog/article/Dopamine-and-temporal-difference-learning-A-fruitful-relationship-between-neuroscience-and-AI">이야기들</a>이다.</p>
 
 <h2 id="카르페-디엠">카르페 디엠</h2>
 
