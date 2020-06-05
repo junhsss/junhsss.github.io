@@ -173,11 +173,11 @@ ul, ol {
   margin: 15px 0;
   padding-left: 30px;
   margin-bottom: 40px;
+  font-weight: 400;
 }
 
 @media screen and (max-width: 640px) {
   ul, ol {
-    font-weight: 600;
     font-size: 17px;
   }
 }
