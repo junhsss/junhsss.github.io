@@ -1,81 +1,24 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>강화 학습 이야기 1 – JunHyoung Ryu's Blog</title>
-
-        <meta charset="utf-8" />
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
-
-    
-    <meta name="description" content="신경망을 학습시켜 보자. 일단 호랑이의 형상이 담겨있는 픽셀 덩어리를 먹인다. 먹은 덩어리가 호랑이라는 범주에 속한다고 얼마나 확신하고 있는지 엿본다. 그 수치가 높아지도록 파라미터를 살짝 건드려준다. 그러면 끝이다. 먹어보았던 것이 무엇인지 알게 되도록 지도해주는 셈이다. 그래서 지도 학습이다. 먹어보지 않은 것까지 알게되는 마법이 일어나기를 바란다면 정화수를 떠놓고 비는 수 밖엔 없다. 정말이다.
-" />
-    <meta property="og:description" content="신경망을 학습시켜 보자. 일단 호랑이의 형상이 담겨있는 픽셀 덩어리를 먹인다. 먹은 덩어리가 호랑이라는 범주에 속한다고 얼마나 확신하고 있는지 엿본다. 그 수치가 높아지도록 파라미터를 살짝 건드려준다. 그러면 끝이다. 먹어보았던 것이 무엇인지 알게 되도록 지도해주는 셈이다. 그래서 지도 학습이다. 먹어보지 않은 것까지 알게되는 마법이 일어나기를 바란다면 정화수를 떠놓고 비는 수 밖엔 없다. 정말이다.
-" />
-    
-    <meta name="author" content="JunHyoung Ryu's Blog" />
-
-    
-    <meta property="og:title" content="강화 학습 이야기 1" />
-    <meta property="twitter:title" content="강화 학습 이야기 1" />
-    
-
-    <!--[if lt IE 9]>
-      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <link rel="stylesheet" type="text/css" href="/style.css" />
-    <link rel="alternate" type="application/rss+xml" title="JunHyoung Ryu's Blog - zero-calorie ideas." href="/feed.xml" />
-
-    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
-  </head>
-
-  <body>
-    <div class="wrapper-masthead">
-      <div class="container">
-        <header class="masthead clearfix">
-          <a href="/" class="site-avatar"><img src="/images/jekyll-logo.png" /></a>
-
-          <div class="site-info">
-            <h1 class="site-name"><a href="/">JunHyoung Ryu's Blog</a></h1>
-            <p class="site-description">zero-calorie ideas.</p>
-          </div>
-
-          <nav>
-            <a href="/about">About</a>
-          </nav>
-        </header>
-      </div>
-    </div>
-
-    <div id="main" role="main" class="container">
-      <article class="post">
-  <h1>강화 학습 이야기 1</h1>
-
-
-  <div class="entry">
-    <p>신경망을 학습시켜 보자. 일단 호랑이의 형상이 담겨있는 픽셀 덩어리를 먹인다. 먹은 덩어리가 호랑이라는 범주에 속한다고 얼마나 확신하고 있는지 엿본다. 그 수치가 높아지도록 파라미터를 살짝 건드려준다. 그러면 끝이다. 먹어보았던 것이 무엇인지 알게 되도록 지도해주는 셈이다. 그래서 지도 학습이다. 먹어보지 않은 것까지 알게되는 마법이 일어나기를 바란다면 정화수를 떠놓고 비는 수 밖엔 없다. 정말이다.</p>
+I"�;<p>신경망을 학습시켜 보자. 일단 호랑이의 형상이 담겨있는 픽셀 덩어리를 먹인다. 먹은 덩어리가 호랑이라는 범주에 속한다고 얼마나 확신하고 있는지 엿본다. 그 수치가 높아지도록 파라미터를 살짝 건드려준다. 그러면 끝이다. 먹어보았던 것이 무엇인지 알게 되도록 지도해주는 셈이다. 그래서 지도 학습이다. 먹어보지 않은 것까지 알게되는 마법이 일어나기를 바란다면 정화수를 떠놓고 비는 수 밖엔 없다. 정말이다.</p>
 
 <p>강화 학습에서는 이런 신탁을 내려줄 미지의 지적 존재를 가정하지 않는다. 확신이 얼마나 타당했는지 학습 주체 스스로 판단해야 한다. 무엇이 옳고 그른지 판단할 근거가 아예 없다면 행동을 교정할 수 있을 턱이 없다. 그래서 보상이라는 신호가 주어진다.</p>
 
 <p>강화 학습은 시간이 존재하는 상황에서의 의사 결정을 논하는 분야다. 잠깐 강화 학습의 언어를 복습하자. 먼저 학습의 주체인 행위자가 있다. 행위자는 자신이 놓인 상황 \(s\)에 기반해 어떤 행동 \(a\)가 최적일지 판단한다. 행동의 결과로 상황이 \(s\)에서 \(s'\)로 변하며 보상 \(r\)을 받는다. 보상은 행동이 그 시점에서 얼마나 좋고 나빴는지 알려준다. 이 과정이 반복된다. 행위자는 누적될 보상이 가장 커지도록 행동하는 법을 배워야 한다.</p>
 
-<p>최적의 의사 결정을 논하기 위해 만든 자못 <a href="https://en.wikipedia.org/wiki/Markov_decision_process">단순해 보이는 모형</a>이다. 모든 의사 결정 문제를 이 언어로 표현할 수 있으리라는 보장은 없어 보인다. 가령 유아의 발달 과정을 설명할 수 있는 <a href="https://arxiv.org/abs/1802.06070">보상 체계가 있을까</a>? 그럴 수도 있고 아닐 수도 있다. <a href="http://incompleteideas.net/rlai.cs.ualberta.ca/RLAI/rewardhypothesis.html">가설</a>에 불과하나 적어도 아직까지는 유용하다.</p>
+<p>최적의 의사 결정을 논하기 위해 만든 자못 <a href="https://en.wikipedia.org/wiki/Markov_decision_process">단순해 보이는 모형</a>이다. 모든 의사 결정 문제를 이 모형으로 표현할 수 있으리라는 보장은 없어 보인다. 가령 유아의 발달 과정을 설명할 수 있는 <a href="https://arxiv.org/abs/1802.06070">보상 체계가 있을까</a>? 그럴 수도 있고 아닐 수도 있다. <a href="http://incompleteideas.net/rlai.cs.ualberta.ca/RLAI/rewardhypothesis.html">가설</a>에 불과하나 적어도 아직까지는 유용하다.</p>
 
-<p>호랑이를 보고 솜사탕이라고 판단했는가? 괜찮다. 솜사탕은 달콤하니 보상을 +1만큼 주자. 잠시 후 다시 보니 형체가 조금 더 가까워졌다. 이제는 호랑이가 아니라 고양이 같다. 고양이는 귀여우니 보상을 +10만큼 주자. 그러나 잘못된 판단이 누적되면 언젠가는 호랑이의 식사가 되는 미래를 마주한다. 그 순간의 보상이 아닌 시간에 따른 누적 보상이 커지도록 행동하는 법을 배워야 하는 이유이다.</p>
+<p>호랑이를 보고 솜사탕이라고 판단했는가? 괜찮다. 솜사탕은 달콤하니 보상을 +1만큼 주자. 잠시 후 다시 보니 형체가 조금 더 가까워졌다. 이제는 호랑이가 아니라 고양이 같다. 고양이는 귀여우니 보상을 +10만큼 주자. 그러나 이렇게 잘못된 판단이 누적되면 언젠가는 호랑이의 식사가 되는 미래를 마주한다. 그 순간의 보상이 아닌 시간에 따른 누적 보상이 커지도록 행동하는 법을 배워야 하는 이유이다.</p>
 
-<p>배우도록 장려하는 방법은 간단하다. 행위자의 행동이 높은 누적 보상을 가져왔다면 당근을, 그렇지 못했다면 채찍을 주어 행동 정책을 교정한다. 경험을 이용해 정책을 교정할 올바른 방향을 판단한다. 그래서 이런 철학을 공유하는 방법론들에 Policy Gradient라는 이름이 붙어있다.</p>
+<p>이를 장려하는 방법은 간단하다. 행위자의 행동이 높은 누적 보상을 가져왔다면 당근을, 그렇지 못했다면 채찍을 주어 행동 정책을 교정한다. 경험을 이용해 정책을 교정할 올바른 방향을 판단한다. 그래서 이러한 철학을 공유하는 방법론들에 Policy Gradient라는 이름이 붙어있다.</p>
 
-<p>정답이 제공되어 있다고 가정하자. 다시 말해 상황 \(s\)에서 행동 \(a\)가 올바른 행위라는 사실을 인간이 알려주었다고 하자. 그렇다면 이 문제는 전형적인 지도 학습이다. 첫 문단에서 말했듯 로그 가능도 \(\log \pi_{\theta} (a \mid s)\)를 높이는 방향으로 신경망을 학습시키면 간단하다. (사족: <a href="http://proceedings.mlr.press/v15/ross11a/ross11a.pdf">현실적으로는 불충분</a>하다. 이런 상황을 강화 학습의 맥락에서는 모방 학습이라 부른다.) 만약 이러한 판단들이 순차적으로 제공되었다면 로그 가능도들을 시간에 따라 전부 더해주면 된다. 이 양이 늘어나도록 행위자의 행동을 교정한다.</p>
+<p>정답이 제공되어 있다고 가정하자. 다시 말해 상황 \(s\)에서 행동 \(a\)가 올바른 행위라는 사실을 인간이 알려주었다고 가정하자. 그렇다면 이 문제는 전형적인 지도 학습이다. 로그 가능도 \(\log \pi_{\theta} (a \mid s)\)를 높이는 방향으로 신경망을 학습시키면 간단하다. (사족: <a href="http://proceedings.mlr.press/v15/ross11a/ross11a.pdf">현실적으로는 불충분</a>하고 이런 상황을 강화 학습의 맥락에서는 모방 학습이라 부른다.) 만약 이러한 판단들이 순차적으로 제공되었다면 로그 가능도들을 시간에 따라 전부 더해주면 된다. 이 양이 늘어나도록 행위자의 행동을 교정한다.</p>
 
 \[\sum_t  \log \pi_{\theta} (a_t \mid s_t)\]
 
-<p>그러나 강화 학습에서는 \(s_t\)에서 \(a_t\)를 하도록 판단한 주체가 인간이 아니라 행위자이다. 그러니 이런 방법론을 사용할 수 없다. 대신 자연스럽게 수정해 볼 수는 있다. \(s_t\)에서 했던 \(a_t\)가 정답은 아니지만 얼마나 옳고 그른 행동인지 정량화할 수 있다고 하자. 그렇게 정량화한 결과를 가중치의 형태를 빌어 행위자에게 일러준다. 행위자는 이 신호를 근거로 행동을 교정한다. 가중치가 양수라면 해당 행동을 강화하고 음수라면 약화한다. 그래서 강화 학습이다.</p>
+<p>그러나 강화 학습에서는 \(s_t\)에서 \(a_t\)를 하도록 판단한 주체가 인간이 아니라 행위자이다. 그러니 이러한 방법론을 사용할 수 없다. 대신 자연스럽게 수정해 볼 수는 있다. \(s_t\)에서 했던 \(a_t\)가 정답은 아니지만 얼마나 옳고 그른 행동인지 정량화할 수 있다고 하자. 그렇게 정량화한 결과를 가중치의 형태를 빌어 행위자에게 일러준다. 행위자는 이 신호를 근거로 행동을 교정한다. 가중치가 양수라면 해당 행동을 강화하고 음수라면 약화한다. 그래서 강화 학습이다.</p>
 
 \[\sum_t (\ \ \ ) \log \pi_{\theta}(a_t|s_t)\]
 
-<p>행위자의 행동들은 순차적으로 누적되어 하나의 미래를 만들어 낸다. 미래는 좋을 수도 있고 나쁠수도 있다. \(a_t\)가 그 미래에 얼마나 기여했는지 따지는건 쉬운 문제가 아니다. 미래는 아주 좋았지만 \(a_t\) 자체는 나빴을 수 있으며 그 반대일 수도 있다. 어쩌면 \(s_t\)에서의 \(a_t\)가 좋은 미래를 만드는데 결정적인 요인이었을수도 있다. <a href="https://en.wikipedia.org/wiki/Causal_inference">인과 관계</a>를 <a href="https://arxiv.org/abs/1605.03661">추론하는 문제</a>가 뜨거운 주제인 이유가 있다. \(s_t\)에서의 \(a_t\)가 이후 미래에 얼마나 기여했는지 판단하는 문제를 강화 학습에서는 기여도 할당 문제라 부른다.</p>
+<p>행위자의 행동들은 순차적으로 누적되어 하나의 미래를 만들어 낸다. 미래는 좋을수도 있고 나쁠수도 있다. \(a_t\)가 그 미래에 얼마나 기여했는지 따지는건 쉬운 문제가 아니다. 미래는 아주 좋았지만 \(a_t\) 자체는 나빴을 수 있으며 그 반대일 수도 있다. 어쩌면 \(s_t\)에서의 \(a_t\)가 좋은 미래를 만드는데 결정적인 요인이었을수도 있다. <a href="https://en.wikipedia.org/wiki/Causal_inference">인과 관계</a>를 <a href="https://arxiv.org/abs/1605.03661">추론하는 문제</a>가 뜨거운 주제인 이유가 있다. \(s_t\)에서의 \(a_t\)가 이후 미래에 얼마나 기여했는지 판단하는 문제를 강화 학습에서는 기여도 할당 문제라 부른다.</p>
 
 <p>행동 \(a_t\) 이후로 받은 보상을 모두 더해 행동 교정의 신호로 제공해볼 수 있다.</p>
 
@@ -83,7 +26,7 @@
 
 <p>그러나 순진해도 너무 순진하다. 백번을 잘 하다가도 한 번 큰 실수를 저질러 버리면 좋은 행동들까지 약화되어 버린다. 인과 관계를 고려하기 귀찮은 자의 알고리즘이다. 그래도 말은 된다. 지도 학습의 얼개를 유지한 채로 보상을 이용한다. 영리하다.</p>
 
-<p>의사 결정을 순차적으로 해 나가는 상황에서 행위자가 했던 행동들을 일단은 정답이라 간주한다. 얻은 보상의 합으로 그러한 행동들이 얼마나 타당했는지 사후적으로 판단하여 행동 교정의 신호로 사용한다. 단순하면서도 직관적인 이 방법론은 REINFORCE라는 이름으로 1992년 처음 제안되었고 오늘날 Policy Gradient 방법론들의 효시가 되었다. 일견 말이 되는 방법론처럼 보인다. 특정한 환경에서는 실제로 작동을 잘 한다. 가령 <a href="https://arxiv.org/abs/1611.01578">NAS</a>가 처음 제안되었을 때도 이 간단한 방법론으로 재미를 톡톡히 보았다.</p>
+<p>의사 결정을 순차적으로 해 나가는 상황에서 행위자가 했던 행동들을 일단은 정답이라 간주한다. 얻은 보상의 합으로 그러한 행동들이 얼마나 타당했는지 사후적으로 판단하여 행동 교정의 신호로 사용한다. 단순하면서도 직관적인 이 방법론은 REINFORCE라는 이름으로 1992년 처음 제안되었고 오늘날 Policy Gradient 방법론들의 효시가 되었다. 일견 말이 되는 방법론처럼 보이고 특정한 환경들에서는 실제로 작동을 잘 하기도 한다. 가령 <a href="https://arxiv.org/abs/1611.01578">NAS</a>가 처음 제안되었을 때도 이 간단한 방법론으로 재미를 톡톡히 보았다.</p>
 
 <h2 id="닥터-스트레인지">닥터 스트레인지</h2>
 
@@ -118,88 +61,4 @@
 <p>그러나 아무리 인간이라도 아예 듣지도 보지도 못한 무언가를 알 수는 없는 법이다. 그러한 상황에서는 인간도 찍어 먹어보아야 안다. 아무리 그래도 전부 찍어 먹어볼 수는 없다. 인생은 짧다. 체계적인 찍어먹기를 위해서는 경험 외적의 지식이 필요하다. 개체의 단계에서 종의 단계로 논의를 확장해야 한다. <a href="https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(19)30061-0">개체의 빠른 학습은 종이 오랜 시간 쌓아 온 선험적 지식에 의존한다</a>. 인류의 선험적 지식은 문화의 형태로 존재하기도 하고 진화를 거쳐 유전자의 형태로 존재하기도 한다. 이에 상응하는 알고리즘이 필요하다. 단순히 생각하면 <a href="http://proceedings.mlr.press/v48/santoro16.pdf">문화는 데이터베이스로</a>, <a href="https://arxiv.org/abs/1703.03400">유전자는 신경망 가중치의 초깃값 따위로</a> 구현하면 될 법도 하다. 이런 아이디어들을 메타 학습이라고 부른다. 아주 핫하다.</p>
 
 <p>이 이야기의 끝맺음은 정해져 있다. 환경과 상호 작용이 불가능한 상황에서 누군가가 만들어 놓은 데이터로 학습하는 방법론에 대한 이야기다. 찍어 먹기는 아예 금기로 간주한다. 대단히 까다로운 상황이다. 그러나 <a href="https://github.com/openai/gpt-3">언어</a>와 <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">시각</a>에 내렸던 딥러닝의 은총이 강화 학습에도 내리게 하기 위해서는 반드시 풀어야 할 문제이다. 찍어 먹어볼 것을 전제하는 강화 학습은 Scalable하지 않다. 최근에서야 이러한 방법론들의 <a href="https://arxiv.org/abs/2004.07219">벤치마크를 위한 데이터베이스</a>를 구성하기 시작했다. 언제나 좋은 신호탄이다. <a href="https://newsight.tistory.com/302">계산이 우리를 자유케 하리라</a>.</p>
-
-  </div>
-
-  <div class="date">
-    20년 6월의 기록
-  </div>
-
-
-  
-<div class="comments">
-	<div id="disqus_thread"></div>
-	<script type="text/javascript">
-
-	    var disqus_shortname = 'junhsss-github-io';
-
-	    (function() {
-	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	    })();
-
-	</script>
-	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-
-
-  
-    <div id="disqus_thread"></div>
-    <script>
-
-      /**
-      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-      var disqus_config = function () {
-        this.page.url = "http://localhost:4000/rl-story-1/";
-        this.page.identifier = "강화 학습 이야기 1";
-      };
-
-      (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = 'https://junhsss-github-io.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                                
-  
-</article>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-    </div>
-    <!--
-    <div class="wrapper-footer">
-      <div class="container">
-        <footer class="footer">
-          
-
-
-
-<a href="https://github.com/barryclark/jekyll-now"><i class="svg-icon github"></i></a>
-
-
-
-
-<a href="https://www.twitter.com/jekyllrb"><i class="svg-icon twitter"></i></a>
-
-
-
-        </footer>
-      </div>
-    </div>
-    -->
-
-    
-
-  </body>
-</html>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+:ET
