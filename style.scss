@@ -314,12 +314,15 @@ nav {
   }
 
   .read-more {
+    font-family: 'Noto Serif KR', serif;
     text-transform: uppercase;
     font-size: 18px;
+    color: #000000;
   }
 }
 
 .entry {
+  font-family: 'Noto Serif KR', serif;;
   line-height:36px;
   margin-bottom:30px;
 }
@@ -339,6 +342,11 @@ footer {
 .caption{
   font-family: 'Noto Serif KR', serif;
   font-size:17px;
+}
+
+.about{
+  font-family: $helveticaNeue;
+  font-weight: 200;
 }
 
 // Settled on moving the import of syntax highlighting to the bottom of the CSS

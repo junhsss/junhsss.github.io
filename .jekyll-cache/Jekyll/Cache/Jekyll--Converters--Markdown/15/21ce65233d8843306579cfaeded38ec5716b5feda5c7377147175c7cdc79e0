@@ -1,4 +1,4 @@
-I"E<p>가치 함수에는 강력한 재귀적 구조가 존재한다. 흙먼지 아래에 방치하기엔 아까운 구조다. 심미적 관점에서도 틀리다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.</p>
+I"�D<p>가치 함수에는 강력한 재귀적 구조가 존재한다. 흙먼지 아래에 방치하기엔 아까운 구조다. 심미적 관점에서도 틀리다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.</p>
 
 <p>상황에 대한 가치함수 \(V^{\pi}\)를 생각해보자. 행위자가 상황 \(s\)에서 행동 \(a\)를 하면 보상 \(r\)를 받고 \(s'\)라는 상황에 놓인다. 원래 상황의 가치 \(V^{\pi}(s)\)와 바뀐 상황의 가치 \(V^{\pi}(s')\) 사이에는 어떤 관계가 존재할까? 두 상태가 시간적으로 매우 가까우므로 크게 다르다면 어색하다. 현재 상황에서 보상 \(r\)을 받고 다음 상황 \(s'\)로 넘어갔으니 이렇게 쓸 수 있다.</p>
 
@@ -57,7 +57,7 @@
 
 <p>이 단락은 역사적 배경에 불과하다. 일부러 자세히 쓰진 않았다. 그러니 잊어도 좋다. 일반적으로 쓰는 방법론은 시간차 학습이다. 시간차 학습이 등장한 배경을 소개하고 싶었다.</p>
 
-<h2 id="자기-주도-학습">자기 주도 학습</h2>
+<h2 id="자아-성찰">자아 성찰</h2>
 
 <p>첫 단락에서 이어진다. \(V^{\pi}(s)\)와 \(r + V^{\pi}(s')\)는 비슷해야 한다.</p>
 
@@ -89,11 +89,11 @@
 
 \[= \left[ (V^{\pi}(s) - V^{\pi}(s')) - r) \right]^2\]
 
-<p>내가 기대한 자극 \(V^{\pi}(s) - V^{\pi}(s')\)과 실제로 받은 자극 \(r\)의 간극이 줄어들도록 나의 기대를 바꾸어 나간다. 전형적인 조건 형성이다. 조건 형성은 자극의 의외성에 달렸다. 받는 자극이 더 의외일수록 조건 형성은 더 강하게 일어난다. 이 논리로 조건 형성을 설명하는 심리학의 레스콜라-바그너 모형이 시간차 학습과 놀랍도록 닮아 있는 이유이다. 삶의 경험이 늘어나면 이 오차는 작아진다. 모든 자극을 예상할 수 있다. 삶이 지루해진다.</p>
+<p>내가 기대한 자극 \(V^{\pi}(s) - V^{\pi}(s')\)과 실제로 받은 자극 \(r\)의 간극이 줄어들도록 나의 기대를 바꾸어 나간다. 전형적인 조건 형성이다. 조건 형성은 자극의 의외성에 달렸다. 받는 자극이 더 의외일수록 조건 형성은 더 강하게 일어난다. 심리학의 레스콜라-바그너 모형은 이 논리로 조건 형성을 설명한다. 그래서 시간차 학습과 놀랍도록 닮아 있다. 삶의 경험이 늘어나면 이 오차는 작아진다. 모든 자극을 예상할 수 있다. 삶이 지루해진다.</p>
 
 <p>A2C에서는 계산 효율을 위해 \(Q^{\pi}(s,a)\)를 \(r+V(s')\)로 근사한다. \(r\) \(-(V^{\pi}(s)\) \(-\) \(V^{\pi}(s'))\)라는 신호를 이용해 행동을 교정하는 셈이다. 실제로 받은 자극이 내가 기대한 자극보다 높을 때 행동이 강화된다. 놀라움을 향한 인간의 욕구를 잘 설명한다. 행동주의 심리학의 강화 원리에 대한 조금은 다른 해석이다.</p>
 
-<p>이러한 원리가 미시적인 세계까지 잘 설명한다는게 놀랍다. 다음 상태의 가치 함수에 보상을 더한 정보가 이전 상태의 가치 함수로 전파된다. 도파민이 전파되는 <a href="https://europepmc.org/backend/ptpmcrender.fcgi?accid=PMC6721851&amp;blobtype=pdf">원리</a>라고 <a href="https://science.sciencemag.org/content/275/5306/1593">한다</a>. 마찬가지로 기대한 자극과 실제 받은 자극이 다르면 다를수록 더 빠른 전파가 일어날테다. 중뇌의 작은 부분에서 생성되는 도파민이 멀리까지 전파될 수 있는 이유이다. <a href="https://arxiv.org/abs/2006.01001?fbclid=IwAR31J3lMmwJXYmAu2KBxcJ0Q0546Wfmx0IJCgkseoNyhjExaecuQUa3jOyw">신경 과학</a>에서는 <a href="https://www.jneurosci.org/content/jneuro/16/5/1936.full.pdf">오래 전부터 알려져 있던 사실</a>들이다. <a href="http://www.princeton.edu/~ndaw/dt.pdf">읽어</a>보면 <a href="https://www.pnas.org/content/108/Supplement_3/15647">재밌</a>는 <a href="https://deepmind.com/blog/article/Dopamine-and-temporal-difference-learning-A-fruitful-relationship-between-neuroscience-and-AI">이야기들</a>이다.</p>
+<p>같은 원리가 미시적인 세계에서도 드러난다는게 놀랍다. 다음 상태의 가치 함수에 보상을 더한 정보가 이전 상태의 가치 함수로 전파된다. 도파민이 전파되는 <a href="https://europepmc.org/backend/ptpmcrender.fcgi?accid=PMC6721851&amp;blobtype=pdf">원리</a>라고 <a href="https://science.sciencemag.org/content/275/5306/1593">한다</a>. 기대한 자극과 실제 받은 자극이 다르면 다를수록 더 빠른 전파가 일어날테다. 중뇌의 작은 부분에서 생성되는 도파민이 멀리까지 전파될 수 있는 이유이다. <a href="https://arxiv.org/abs/2006.01001?fbclid=IwAR31J3lMmwJXYmAu2KBxcJ0Q0546Wfmx0IJCgkseoNyhjExaecuQUa3jOyw">신경 과학</a>에서는 <a href="https://www.jneurosci.org/content/jneuro/16/5/1936.full.pdf">오래 전부터 알려져 있던 사실</a>들이다. <a href="http://www.princeton.edu/~ndaw/dt.pdf">읽어</a>보면 <a href="https://www.pnas.org/content/108/Supplement_3/15647">재밌</a>는 <a href="https://deepmind.com/blog/article/Dopamine-and-temporal-difference-learning-A-fruitful-relationship-between-neuroscience-and-AI">이야기들</a>이다.</p>
 
 <h2 id="카르페-디엠">카르페 디엠</h2>
 

@@ -4,8 +4,9 @@ title: About
 permalink: /about/
 ---
 
-떠오르는 생각을 적습니다.
+떠오르는 생각들을 적습니다.
 
-### Contact
+
+# Contact
 
 [junhsssr@gmail.com](mailto:junhsssr@gmail.com)

@@ -381,11 +381,14 @@ nav a {
 }
 
 .post .read-more {
+  font-family: 'Noto Serif KR', serif;
   text-transform: uppercase;
   font-size: 18px;
+  color: #000000;
 }
 
 .entry {
+  font-family: 'Noto Serif KR', serif;
   line-height: 36px;
   margin-bottom: 30px;
 }
@@ -405,6 +408,11 @@ footer {
 .caption {
   font-family: 'Noto Serif KR', serif;
   font-size: 17px;
+}
+
+.about {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 200;
 }
 
 .highlight {
