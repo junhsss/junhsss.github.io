@@ -7,6 +7,6 @@ permalink: /about/
 떠오르는 생각들을 적습니다.
 
 
-# Contact
+[facebook.com/zerocalorieideas](https://facebook.com/zerocalorieideas)
 
 [junhsssr@gmail.com](mailto:junhsssr@gmail.com)
