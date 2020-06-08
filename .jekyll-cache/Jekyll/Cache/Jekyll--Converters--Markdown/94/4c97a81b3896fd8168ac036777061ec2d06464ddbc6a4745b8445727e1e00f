@@ -1,61 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>강화 학습 이야기 2</title>
-
-        <meta charset="utf-8" />
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
-
-    
-    <meta name="description" content="도대체 이게 무슨 탁상 공론인가? 미래에 받을 수 있는 누적 보상의 기댓값이라니. 가능한 미래들을 전부 열거해 보기라도 하겠다는 말인가? 지난 이야기를 읽으며 이런 생각이 들었다면 정상이다. 가치 함수가 바로 그렇게 정의되는 양이다. 정책 \(\pi\)가 어떤 행동을 해야 하는지 알려준다면 가치 함수는 그러한 행동 이후에 얼마만큼의 누적 보상을 기대할 수 있는지 알려준다. 정의를 되짚어보자.
-" />
-    <meta property="og:description" content="도대체 이게 무슨 탁상 공론인가? 미래에 받을 수 있는 누적 보상의 기댓값이라니. 가능한 미래들을 전부 열거해 보기라도 하겠다는 말인가? 지난 이야기를 읽으며 이런 생각이 들었다면 정상이다. 가치 함수가 바로 그렇게 정의되는 양이다. 정책 \(\pi\)가 어떤 행동을 해야 하는지 알려준다면 가치 함수는 그러한 행동 이후에 얼마만큼의 누적 보상을 기대할 수 있는지 알려준다. 정의를 되짚어보자.
-" />
-    
-    <meta name="author" content="JunHyoung Ryu's Blog" />
-
-    
-    <meta property="og:title" content="강화 학습 이야기 2" />
-    <meta property="twitter:title" content="강화 학습 이야기 2" />
-    
-
-    <!--[if lt IE 9]>
-      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <link rel="stylesheet" type="text/css" href="/style.css" />
-    <link rel="alternate" type="application/rss+xml" title="JunHyoung Ryu's Blog - zero-calorie ideas." href="/feed.xml" />
-
-    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
-  </head>
-
-  <body>
-    <div class="wrapper-masthead">
-      <div class="container">
-        <header class="masthead clearfix">
-          <a href="/" class="site-avatar"><img src="/images/jekyll-logo.png" /></a>
-
-          <div class="site-info">
-            <h1 class="site-name"><a href="/">JunHyoung Ryu's Blog</a></h1>
-            <p class="site-description">zero-calorie ideas.</p>
-          </div>
-
-          <nav>
-            <a href="/about" class="about">About</a>
-          </nav>
-        </header>
-      </div>
-    </div>
-
-    <div id="main" role="main" class="container">
-      <article class="post">
-  <h1>강화 학습 이야기 2</h1>
-
-
-  <div class="entry">
-    <p>도대체 이게 무슨 탁상 공론인가? 미래에 받을 수 있는 누적 보상의 기댓값이라니. 가능한 미래들을 전부 열거해 보기라도 하겠다는 말인가? <a href="/rl-story-1/">지난 이야기</a>를 읽으며 이런 생각이 들었다면 정상이다. 가치 함수가 바로 그렇게 정의되는 양이다. 정책 \(\pi\)가 어떤 행동을 해야 하는지 알려준다면 가치 함수는 그러한 행동 이후에 얼마만큼의 누적 보상을 기대할 수 있는지 알려준다. 정의를 되짚어보자.</p>
+I"ΰ<p>도대체 이게 무슨 탁상 공론인가? 미래에 받을 수 있는 누적 보상의 기댓값이라니. 가능한 미래들을 전부 열거해 보기라도 하겠다는 말인가? <a href="/rl-story-1/">지난 이야기</a>를 읽으며 이런 생각이 들었다면 정상이다. 가치 함수가 바로 그렇게 정의되는 양이다. 정책 \(\pi\)가 어떤 행동을 해야 하는지 알려준다면 가치 함수는 그러한 행동 이후에 얼마만큼의 누적 보상을 기대할 수 있는지 알려준다. 정의를 되짚어보자.</p>
 
 <ul>
   <li>상태 \(s\)에서 행위 \(a\)를 했을 때 미래에 받을 수 있는 누적 보상의 기댓값을 \(Q(s, a)\),</li>
@@ -85,7 +28,7 @@
 <p>\(s_t\)와 \(a_t\)에서 시작하는 하나의 미래만 고려해 정답을 만들기로 했었다. 그러니 입력은 \(s_t\)와 \(a_t\), 정답은 \(\sum_{t'=t}r_{t'}\)로 잡고 신경망을 훈련시키면 충분하다.</p>
 
 <details>
-<summary>Talk is cheap. Show me the code. ┓ </summary>
+<summary><u>코드로 보기.</u></summary>
 <div>
 
     <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">gym</span>
@@ -209,10 +152,10 @@
 
 <p>그런데 3단계에서 정책 \(\pi\)가 조금이라도 변하는 순간 가치 함수 \(Q^{\pi}\)는 무용지물이 된다. 정책이 변했으니 가치 함수를 다시 찾아야 한다. 절망적이다. 그래도 경사 하강법은 정책을 크게 바꾸지 않으니 다행이다. 덕분에 \(\pi\)와 \(Q^{\pi}\)를 한 번씩 번갈아 학습시키기만 해도 충분하다. 바뀌기 전 정책에 대한 가치 함수를 초깃값 삼아 바뀐 후의 정책에 대한 가치 함수를 찾는 셈이다. 이런 미묘한 부분들까지 꼼꼼히 짚고 넘어가야 안 헷갈린다.</p>
 
-<p>정책 \(\pi\)와 가치 함수 \(Q^{\pi}\)을 표현하는데는 독립된 두 신경망을 사용한다. 그러니 태생적으로 불안정 할 수 밖에 없다. 지난 이야기에서 논했던대로 \(V^{\pi}\) 까지 있다면 더 나은 신뢰 할당을 할 수 있다. \(V^{\pi}\)를 표현하는 세 번째 신경망을 도입하면 된다.</p>
+<p>정책 \(\pi\)와 가치 함수 \(Q^{\pi}\)을 표현하는데는 독립된 두 신경망을 사용한다. 그러니 태생적으로 불안정 할 수 밖에 없다. 지난 이야기에서 논했던대로 \(V^{\pi}\) 까지 있다면 더 나은 신뢰 할당을 할 수 있다. \(V^{\pi}\)를 표현하는 세 번째 신경망을 도입하면 된다. 논리는 \(Q^{\pi}\)와 크게 다르지 않다.</p>
 
-<details id="inside">
-<summary>Talk is cheap. Show me the code. ┓ </summary>
+<details>
+<summary><u>코드로 보기.</u></summary>
 <div>
 
     <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">gym</span>
@@ -350,122 +293,6 @@
 
 <p>독자들 스스로 이 등식과 근사식의 함의를 고찰해보길 바란다. \(Q^{\pi}\)와 \(V^{\pi}\)의 정의를 상기하며 두 함수가 어떤 관계로 엮여있을지 찬찬히 생각해보면 된다. \(V^{\pi}\)를 \(Q^{\pi}\)의 기댓값으로 표현할 수도 있다. 이런 관점은 이미 <a href="/rl-story-1/">지난 이야기</a>에서 등장했었다.</p>
 
-<details id="inside">
-<summary>Talk is cheap. Show me the code. ┓ </summary>
-<div>
-
-    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">gym</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="n">nn</span>
-
-<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="p">.</span><span class="n">make</span><span class="p">(</span><span class="s">"CartPole-v1"</span><span class="p">)</span>
-
-<span class="n">STATE_DIM</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">observation_space</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">HIDDEN_DIM</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="n">ACTION_DIM</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">action_space</span><span class="p">.</span><span class="n">n</span>
-<span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.0001</span>
-
-<span class="k">def</span> <span class="nf">to_tensor</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">array</span><span class="p">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">calculate_returns</span><span class="p">(</span><span class="n">rewards</span><span class="p">):</span>
-    <span class="n">R</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">returns</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rewards</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="n">R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="n">r</span>
-        <span class="n">returns</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">returns</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-<span class="n">policy</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
-                       <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
-                       <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
-                       <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
-                       <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">ACTION_DIM</span><span class="p">),</span>
-                       <span class="n">nn</span><span class="p">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-
-<span class="n">v</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
-                  <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
-                  <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
-                  <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
-                  <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-
-<span class="n">optimizer_actor</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">policy</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="n">LEARNING_RATE</span><span class="p">)</span>
-<span class="n">optimizer_critic</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">LEARNING_RATE</span><span class="p">)</span>
-
-<span class="n">track_performance</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">):</span>
-    <span class="n">STATE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">NEXT_STATE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">ACTION_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">REWARD_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">DONE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="c1"># Interacting with the environment. (i.e. Generating single trajectory.)
-</span>    <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
-    <span class="n">done</span> <span class="o">=</span> <span class="bp">False</span>
-
-    <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
-        <span class="n">action_probs</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">to_tensor</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
-        <span class="n">sampled_action</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">action_probs</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="n">item</span><span class="p">()</span>
-        <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">step</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
-
-        <span class="n">STATE_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="n">NEXT_STATE_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_state</span><span class="p">)</span>
-        <span class="n">ACTION_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
-        <span class="n">REWARD_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
-        <span class="n">DONE_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">done</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)</span>
-
-        <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
-
-    <span class="c1"># Concatenation to tensors.
-</span>    <span class="n">STATE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">STATE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
-    <span class="n">NEXT_STATE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">NEXT_STATE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
-    <span class="n">ACTION_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">ACTION_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nb">long</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">REWARD_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">RETURN_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">calculate_returns</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">DONE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">DONE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-
-    <span class="s">"""
-    Critic V Learning Phase
-    """</span>
-    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
-</span>    <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
-    <span class="n">single_true_cumulative_rewards</span> <span class="o">=</span> <span class="n">RETURN_TENSORS</span>
-    <span class="n">critic_loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">single_true_cumulative_rewards</span><span class="p">).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
-    <span class="c1"># Optimization as usual.
-</span>    <span class="n">optimizer_critic</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
-    <span class="n">critic_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
-    <span class="n">optimizer_critic</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
-
-    <span class="s">"""
-    Actor (Policy) Learning Phase
-    """</span>
-    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
-</span>    <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
-    <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">likelihoods</span><span class="p">)</span> <span class="c1"># As if it was a supervised learning problem.
-</span>    <span class="n">assignmented_credits</span> <span class="o">=</span> <span class="n">REWARD_TENSORS</span> <span class="o">+</span> <span class="n">v</span><span class="p">(</span><span class="n">NEXT_STATE_TENSORS</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">DONE_TENSORS</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
-    <span class="n">weighted_log_likelihoods</span> <span class="o">=</span> <span class="n">log_likelihoods</span> <span class="o">*</span> <span class="n">assignmented_credits</span>
-
-    <span class="c1"># Optimization as usual.
-</span>    <span class="n">pseudo_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">weighted_log_likelihoods</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span>
-    <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
-    <span class="n">pseudo_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
-    <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
-
-    <span class="c1"># Keeping track of performace of the algorithm.
-</span>    <span class="n">track_performance</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">f"</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">th Trial -&gt; </span><span class="si">{</span><span class="n">track_performance</span><span class="o">/</span><span class="mi">100</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
-        <span class="n">track_performance</span> <span class="o">=</span> <span class="mi">0</span>
-</code></pre></div>    </div>
-
-  </div>
-</details>
-
 <p>정리해보자. 괄호 안에 무엇을 넣어야 더 나은 기여도 할당이 가능할지 생각해 보았다.</p>
 
 \[\sum_t (\ \ \ ) \log \pi_{\theta}(a_t|s_t)\]
@@ -477,88 +304,4 @@
 <p>신경망을 \(Q^{\pi}\) 따로 \(V^{\pi}\) 따로 사용할 수 없으니 Advantage의 근사로서는 일반적으로 \(r_t + V^{\pi}(s_{t+1}) - V^{\pi}(s_{t})\)를 사용한다고 했다. 이를 조금 더 일반화하여 여러 방식으로 Advantage를 표현할 수 있다. 관심있는 독자는 <a href="https://arxiv.org/abs/1506.02438">GAE</a>를 읽어보면 좋다. 이후 맥락에서 \({\hat{A_t}}\)라는 기호가 나온다면 무언가 한 가지 방법으로 Advantage를 추정한 값이라 이해하면 된다.</p>
 
 <p>가치 함수를 도입했다고 지난 이야기의 말미에 등장했던 문제점들이 해결되는건 아니다. 받는 보상이 없으면 정답도 항상 \(0\)이다. 그러면 가치 함수는 \(0\)을 뱉는 방법을 학습한다. 진정한 무가치 함수로 거듭난다. 쇼펜하우어가 따로 없다. 혹시 무가치 함수가 필요하다면 시도해 보자.</p>
-
-  </div>
-
-  <div class="date">
-    20년 6월의 기록
-  </div>
-
-
-  
-<div class="comments">
-	<div id="disqus_thread"></div>
-	<script type="text/javascript">
-
-	    var disqus_shortname = 'junhsss-github-io';
-
-	    (function() {
-	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	    })();
-
-	</script>
-	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-
-
-  
-    <div id="disqus_thread"></div>
-    <script>
-
-      /**
-      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-      var disqus_config = function () {
-        this.page.url = "http://localhost:4000/rl-story-2/";
-        this.page.identifier = "강화 학습 이야기 2";
-      };
-
-      (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = 'https://junhsss-github-io.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                                
-  
-</article>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-    </div>
-    <!--
-    <div class="wrapper-footer">
-      <div class="container">
-        <footer class="footer">
-          
-
-
-
-<a href="https://github.com/barryclark/jekyll-now"><i class="svg-icon github"></i></a>
-
-
-
-
-<a href="https://www.twitter.com/jekyllrb"><i class="svg-icon twitter"></i></a>
-
-
-
-        </footer>
-      </div>
-    </div>
-    -->
-
-    
-
-  </body>
-</html>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+:ET
