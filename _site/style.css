@@ -892,7 +892,7 @@ code {
 .highlight .cm {
   color: #0086f7;
   font-style: italic;
-  background-color: #80e780;
+  background-color: #86ff86;
 }
 
 /* Comment.Multiline */
@@ -907,14 +907,14 @@ code {
 .highlight .c1 {
   color: #0086f7;
   font-style: italic;
-  background-color: #80e780;
+  background-color: #86ff86;
 }
 
 /* Comment.Single */
 .highlight .cs {
   color: #0086f7;
   font-style: italic;
-  background-color: #80e780;
+  background-color: #86ff86;
 }
 
 /* Comment.Special */
