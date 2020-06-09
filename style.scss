@@ -97,7 +97,7 @@ p {
 
 a {
   font-weight: 200;
-  color: $blue;
+  color: #7F4BF0;
   text-decoration: none;
 	cursor: pointer;
   &:hover, &:active {
@@ -430,8 +430,8 @@ footer {
 
 summary {
   font-family: $helveticaNeue;
-  font-weight:200;
-  font-size:20px;
+  font-weight: 300;
+  font-size:21px;
   text-align: center;
   color: #7F4BF0;
   font-style: italic;
@@ -446,7 +446,7 @@ summary::-webkit-details-marker {
 }
 summary:before {
   content: '┗ ';
-  color: #7F4BF0;;
+  color: #7F4BF0;
   margin-right: 5px;
 }
 

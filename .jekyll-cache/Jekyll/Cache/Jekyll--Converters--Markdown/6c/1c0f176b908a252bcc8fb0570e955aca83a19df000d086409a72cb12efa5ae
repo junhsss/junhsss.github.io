@@ -1,0 +1,440 @@
+I"��<p>도대체 이게 무슨 탁상 공론인가? 미래에 받을 수 있는 누적 보상의 기댓값이라니. 가능한 미래들을 전부 열거해 보기라도 하겠다는 말인가? <a href="/rl-story-1/">지난 이야기</a>를 읽으며 이런 생각이 들었다면 정상이다. 가치 함수가 바로 그렇게 정의되는 양이다. 정책 \(\pi\)가 어떤 행동을 해야 하는지 알려준다면 가치 함수는 그러한 행동 이후에 얼마만큼의 누적 보상을 기대할 수 있는지 알려준다. 정의를 되짚어보자.</p>
+
+<ul>
+  <li>상태 \(s\)에서 행위 \(a\)를 했을 때 미래에 받을 수 있는 누적 보상의 기댓값을 \(Q(s, a)\),</li>
+  <li>상태 \(s\)에 놓여 있을 때 미래에 받을 수 있는 누적 보상의 기댓값을 \(V(s)\)라 한다.</li>
+</ul>
+
+<p>이 정의에서 미래라는 말은 모호하다. 누가 만드는 미래인가? 같은 동네에서 나고 자랐더라도 내가 만드는 미래와 옆집 철수가 만드는 미래는 다르다. 그래서 가치 함수를 정의할 땐 행위자의 정책 \(\pi\)가 개입한다. 윗 첨자로 어떤 정책을 따를 때의 가치 함수인지 알려 주어야 명확하다. \(Q^{\pi}(s, a)\), \(V^{\pi}(s)\) 이렇게 쓴다.</p>
+
+\[Q^{\pi}(s, a)=\mathbb{E}_{\pi} \left[  \sum_{t'=t} r_{t'} \mid s_t = s, a_t = a \right]\]
+
+\[V^{\pi}(s) =\mathbb{E}_{\pi} \left[  \sum_{t'=t} r_{t'} \mid s_t = s \right]\]
+
+<p>상황과 행동의 가치 함수 \(Q^{\pi}\)의 경우를 생각해 보자. 시점 \(t\)에서 상황 \(s\)에 놓여 있다. 그 때 \(a\)라는 행동을 하라는 조건이 주어졌다. 거기서부터 행위자는 정책 \(\pi\)를 따라 무수히 많은 미래들을 만들어본다. (이후로는 행위자와 정책 \(\pi\)를 동일시하겠다.) 그렇게 만들어진 여러 미래들에서 계산되는 누적 보상의 평균을 \(Q^{\pi}\)로 정한다고 받아들이면 된다. 상황의 가치 함수 \(V^{\pi}\)도 마찬가지다. 상황 \(s\)에서 정책 \(\pi\)를 따라 무수히 많은 미래를 만들고 누적 보상의 평균을 계산한다. 다만 처음 행동까지 정책 \(\pi\)에게 맡겨 버린다는 차이가 있다.</p>
+
+<p>\(s\)와 \(a\)는 조건으로 주어지는 데이터라는 점을 짚고 넘어가야 한다. 정책 \(\pi\)를 고수할 때 현실적으로 맞닥뜨릴 일이 없는 \(s\)와 \(a\)에 대해서도 이론상 \(Q^{\pi}(s, a)\) 는 정의된다. 강원도 토박이 철수(\(\pi\))가 세렝게티 한복판(\(s\))에서 삼겹살을 구워먹는게(\(a\)) 얼마나 현명한 일인지(\(Q^{\pi}(s, a)\)) 짐작이야 해 볼 수 있다는 말이다. 물론 \(Q^{\pi}(s, a)\)를 추정해보고 싶다면 세렝게티 삼겹살 파티에 철수를 데려다 놓고 미래를 관찰해보아야 한다. 현재로서는 유일한 방법이다. 타임머신이 있는 경우에는 여러번 관찰해보면 더 좋다.</p>
+
+<p>만약 신경망으로 \(Q^{\pi}(s, a)\)를 표현하고 싶다면 간단하다. \(s\)와 \(a\)를 입력으로, 이후 수많은 미래에서 계산한 누적 보상들의 평균을 정답으로 두고 학습시키면 된다. 미래를 여러 번 관측할 수 있다면 단순한 지도학습에 불과하다. 그러나 인과율을 존중하자. 미래를 여러 번 관측할 수는 없다. 그러니 현실적으로는 단 하나의 미래에서 얻은 누적 보상을 정답으로 사용할 수 밖에 없다. 정말로 그렇게 구현한다. 그래도 작동을 퍽 잘 한다. (사족: 약간은 추상적인 이야기지만 어차피 평균 제곱 오차가 작아지도록 학습시키면 가능한 값들이 이루는 분포의 기댓값을 학습하는 셈이니 괜찮다. <a href="https://web.stanford.edu/~hastie/ElemStatLearn/">이 교재</a>의 18 페이지를 참고하자.)</p>
+
+<p>정책 \(\pi\)를 따를 때의 가치 함수 \(Q^{\pi}\)를 알고 싶은 상황이다. 그러니 정답을 계산할 때 필요한 미래는 반드시 \(\pi\)가 만든 미래여야만 한다는 사실에 유의하자. 다른 정책 \(\pi^{\beta}\)가 만든 미래를 이용해 정답을 계산한다면 \(Q^{\pi^{\beta}}\)를 알게 되는 셈이다. 아무런 의미가 없다.</p>
+
+<p>그렇다면 행위자와 정책 \(\pi\)가 어떻게 미래를 만들어 가는지 따져볼 필요가 있다. 위에서 이야기했듯이 \(s_t\)에서 \(a_t\)를 하는건 조건이다. 행위자를 \(s_t\)로 끌어와 강제로 \(a_t\)를 시켜본다. \(s_t\)에서 \(a_t\)를 했을 때 어떤 미래 \(s_{t+1}\)를 마주하게 될는지는 모른다. 그러나 적어도 행위자의 소관은 아니다. 행위자는 이미 행동을 억지로 해 버린 상황이다. 행위자는 손을 놓고 보상 \(r_t\)와 함께 \(s_{t+1}\)를 겸허히 맞이한다. 그 이후나 되어야 비로소 행위자의 이성이 개입한다. 행위자는 정책 \(\pi\)에 따라 \(a_{t+1}\)를 결정한다. 왜 행위자가 \(a_{t+1}\)를 결정하는가? \(Q^{\pi}(s_t, a_t)\)의 정의는 \(s_t\)에서 \(a_t\)를 했을 때, 정책 \(\pi\)를 따라가면 미래에 받을 수 있는 누적 보상의 기댓값이라고 했었다. 정의에 충실하게 \(s_t\)와 \(a_t\) 이후로 정책 \(\pi\)에 따라 행동하고 있다.</p>
+
+<p>\(Q^{\pi}(s_t, a_t)\)를 학습시키기 위해 만들어질 데이터를 시간 순서에 따라 써 보자.</p>
+
+<p>\(s_t\) \(\rightarrow\) \(a_t\) \(\rightarrow\) \({\color{#642EFE} {r_t}}\) \(\rightarrow\) \(s_{t+1}\) \(\rightarrow\) \(a_{t+1}\) \(\rightarrow\) \({\color{#642EFE} {r_{t+1}}}\) \(\rightarrow\) \(s_{t+2}\) \(\rightarrow\) \(\dots\)</p>
+
+<p>\(s_t\)와 \(a_t\)에서 시작하는 하나의 미래만 고려해 정답을 만들기로 했었다. 그러니 입력은 \(s_t\)와 \(a_t\), 정답은 \(\sum_{t'=t}r_{t'}\)로 잡고 신경망을 훈련시키면 충분하다.</p>
+
+<details>
+<summary>Talk is cheap. Show me the code. ┓ </summary>
+<div>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">gym</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="n">nn</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="p">.</span><span class="n">make</span><span class="p">(</span><span class="s">"CartPole-v1"</span><span class="p">)</span>
+
+<span class="n">STATE_DIM</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">observation_space</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">HIDDEN_DIM</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">ACTION_DIM</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">action_space</span><span class="p">.</span><span class="n">n</span>
+<span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.0005</span>
+
+<span class="k">def</span> <span class="nf">to_tensor</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">array</span><span class="p">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">calculate_returns</span><span class="p">(</span><span class="n">rewards</span><span class="p">):</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">returns</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rewards</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="n">r</span>
+        <span class="n">returns</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">returns</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">policy</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">ACTION_DIM</span><span class="p">),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="s">"""
+Note that it's handy if we implement Q in the form of Q(s)[a] when the action space is discrete. 
+We could still implement Q as Q(s, a), but it's unnecessary. (one-hot encode actions or whatever.)
+This specific view will be elaborated further later.
+"""</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">ACTION_DIM</span><span class="p">))</span>
+
+<span class="c1"># You need separate optimizers for actor and critic respectively.
+</span><span class="n">optimizer_actor</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">policy</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="n">LEARNING_RATE</span><span class="p">)</span>
+<span class="n">optimizer_critic</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">LEARNING_RATE</span><span class="p">)</span>
+
+<span class="n">track_performance</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">):</span>
+    <span class="n">STATE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ACTION_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">REWARD_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Interacting with the environment. (i.e. Generating single trajectory.)
+</span>    <span class="c1"># Everything should be familiar.
+</span>    <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="c1"># Deactivate PyTorch autograd engine as you don't need to compute gradient here.
+</span>    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span> 
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+            <span class="n">action_probs</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">to_tensor</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+            <span class="n">sampled_action</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">action_probs</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="n">item</span><span class="p">()</span>
+            <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">step</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
+
+            <span class="n">STATE_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="n">ACTION_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
+            <span class="n">REWARD_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
+
+            <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
+
+    <span class="c1"># Concatenation to tensors.
+</span>    <span class="n">STATE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">STATE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">ACTION_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">ACTION_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nb">long</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">RETURN_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">calculate_returns</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">),</span>\
+                                  <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="s">"""
+    Critic (State-action value) learning phase
+    """</span>
+    <span class="c1"># Q(s)[a] ≈ cumulative rewards after a in s.
+</span>    <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
+    <span class="n">single_true_cumulative_rewards</span> <span class="o">=</span> <span class="n">RETURN_TENSORS</span>
+    <span class="n">critic_loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">single_true_cumulative_rewards</span><span class="p">).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="c1"># Optimization as usual.
+</span>    <span class="n">optimizer_critic</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">critic_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer_critic</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="s">"""
+    Actor (Policy) learning phase
+    """</span>
+    <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
+    <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">likelihoods</span><span class="p">)</span> 
+
+    <span class="c1"># Log-likelihoods are now weighted with the state-action values calculated by q. i.e. Q(s)[a]
+</span>    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">assigned_credits</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
+
+    <span class="n">weighted_log_likelihoods</span> <span class="o">=</span> <span class="n">log_likelihoods</span> <span class="o">*</span> <span class="n">assigned_credits</span>
+
+    <span class="c1"># Optimization as usual.
+</span>    <span class="n">pseudo_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">weighted_log_likelihoods</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">pseudo_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="c1"># Keeping track of performace of the algorithm.
+</span>    <span class="n">track_performance</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">f"</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">th Trial -&gt; </span><span class="si">{</span><span class="n">track_performance</span><span class="o">/</span><span class="mi">100</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="n">track_performance</span> <span class="o">=</span> <span class="mi">0</span>
+</code></pre></div>    </div>
+
+  </div>
+</details>
+
+<h2 id="천지-개벽">천지 개벽</h2>
+
+<p>\(Q^{\pi}(s_t, a_t)\)를 추정하고 싶다면 이 길고 긴 사슬과 같은 데이터는 행위자가 만들었어야 한다고 강조했다. 그러나 행위자가 데이터에 개입한 흔적은 \(a_{t+1}\)부터 드러난다. 그러니 그 전까지는 행위자와 무관한 데이터다. 만약 \(Q^{\pi}\)를 학습시키기 위한 어떤 방법론이 \(a_{t+1}\) 이후의 데이터를 요구하지 않는다면 이론 상 행위자와 무관한 데이터로도 학습이 가능하다. 대단히 중요한 관찰이다. 천지가 개벽할 일이다. 정책 \(\pi\)의 가치 함수를 \(\pi\)의 흔적이 없는 데이터로도 알아낼 수 있다니. 철수가 만드는 가치를 영희의 행동만으로 알아낼 수 있다니! 영리한 독자라면 의구심이 들어야 정상이다. 이 이야기가 등장하려면 조금 더 기다려야 한다. 그러니 잠깐 잊고 원래 이야기를 이어가자.</p>
+
+<h2 id="배우-수업">배우 수업</h2>
+
+<p><a href="/rl-story-1/">지난 이야기</a>에서 말했듯이 가치 함수 \(Q^{\pi}\)를 알고 있다면 행위자의 정책 \(\pi\)를 교정할 때 각 행동들의 기여도를 더 합리적으로 판단할 수 있다. 이를 알고리즘으로 써 보자.</p>
+
+<ol>
+  <li>정책 \(\pi\)를 이용해 데이터를 모은다.</li>
+  <li>정책 \(\pi\)의 가치 함수 \(Q^{\pi}\)를 추정한다.</li>
+  <li>추정한 가치함수 \(Q^{\pi}\)를 근거로 정책 \(\pi\)의 행동을 교정한다.</li>
+</ol>
+
+<p>그런데 3단계에서 정책 \(\pi\)가 조금이라도 변하는 순간 가치 함수 \(Q^{\pi}\)는 무용지물이 된다. 정책이 변했으니 가치 함수를 다시 찾아야 한다. 절망적이다. 그래도 경사 하강법은 정책을 크게 바꾸지 않으니 다행이다. 덕분에 \(\pi\)와 \(Q^{\pi}\)를 한 번씩 번갈아 학습시키기만 해도 충분하다. 바뀌기 전 정책에 대한 가치 함수를 초깃값 삼아 바뀐 후의 정책에 대한 가치 함수를 찾는 셈이다. 이런 미묘한 부분들까지 꼼꼼히 짚고 넘어가야 안 헷갈린다.</p>
+
+<p>정책 \(\pi\)와 가치 함수 \(Q^{\pi}\)을 표현하는데는 독립된 두 신경망을 사용한다. 그러니 태생적으로 불안정 할 수 밖에 없다. 지난 이야기에서 논했던대로 \(V^{\pi}\) 까지 있다면 더 나은 신뢰 할당을 할 수 있다. \(V^{\pi}\)를 표현하는 세 번째 신경망을 도입하면 된다.</p>
+
+<details id="inside">
+<summary>Talk is cheap. Show me the code. ┓ </summary>
+<div>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""
+Note that we NEVER do this in practice. 
+Just for a pedagogical purpose. :)
+"""</span>
+<span class="kn">import</span> <span class="nn">gym</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="n">nn</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="p">.</span><span class="n">make</span><span class="p">(</span><span class="s">"CartPole-v1"</span><span class="p">)</span>
+
+<span class="n">STATE_DIM</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">observation_space</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">HIDDEN_DIM</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">ACTION_DIM</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">action_space</span><span class="p">.</span><span class="n">n</span>
+<span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.0001</span>
+
+<span class="k">def</span> <span class="nf">to_tensor</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">array</span><span class="p">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">calculate_returns</span><span class="p">(</span><span class="n">rewards</span><span class="p">):</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">returns</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rewards</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="n">r</span>
+        <span class="n">returns</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">returns</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">policy</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">ACTION_DIM</span><span class="p">),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">ACTION_DIM</span><span class="p">))</span>
+
+
+<span class="n">v</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="n">optimizer_actor</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">policy</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="n">LEARNING_RATE</span><span class="p">)</span>
+<span class="n">optimizer_critic_q</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">LEARNING_RATE</span><span class="p">)</span>
+<span class="n">optimizer_critic_v</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">LEARNING_RATE</span><span class="p">)</span>
+
+<span class="n">track_performance</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">):</span>
+    <span class="n">STATE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ACTION_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">REWARD_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Interacting with the environment. (i.e. Generating single trajectory.)
+</span>    <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+        <span class="n">action_probs</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">to_tensor</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+        <span class="n">sampled_action</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">action_probs</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">step</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
+
+        <span class="n">STATE_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">ACTION_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
+        <span class="n">REWARD_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
+
+        <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
+
+    <span class="c1"># Concatenation to tensors.
+</span>    <span class="n">STATE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">STATE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">ACTION_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">ACTION_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nb">long</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">RETURN_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">calculate_returns</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="s">"""
+    Critic Q Learning Phase
+    """</span>
+    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
+</span>    <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
+    <span class="n">single_true_cumulative_rewards</span> <span class="o">=</span> <span class="n">RETURN_TENSORS</span>
+    <span class="n">critic_q_loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">single_true_cumulative_rewards</span><span class="p">).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+    <span class="c1"># Optimization as usual.
+</span>    <span class="n">optimizer_critic_q</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">critic_q_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer_critic_q</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="s">"""
+    Critic V Learning Phase
+    """</span>
+    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
+</span>    <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
+    <span class="n">single_true_cumulative_rewards</span> <span class="o">=</span> <span class="n">RETURN_TENSORS</span>
+    <span class="n">critic_v_loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">single_true_cumulative_rewards</span><span class="p">).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+    <span class="c1"># Optimization as usual.
+</span>    <span class="n">optimizer_critic_v</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">critic_v_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer_critic_v</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="s">"""
+    Actor (Policy) Learning Phase
+    """</span>
+    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
+</span>    <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
+    <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">likelihoods</span><span class="p">)</span> <span class="c1"># As if it were a supervised learning problem.
+</span>    <span class="n">assignmented_credits</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
+    <span class="n">weighted_log_likelihoods</span> <span class="o">=</span> <span class="n">log_likelihoods</span> <span class="o">*</span> <span class="n">assignmented_credits</span>
+
+    <span class="c1"># Optimization as usual.
+</span>    <span class="n">pseudo_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">weighted_log_likelihoods</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">pseudo_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="c1"># Keeping track of performace of the algorithm.
+</span>    <span class="n">track_performance</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">f"</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">th Trial -&gt; </span><span class="si">{</span><span class="n">track_performance</span><span class="o">/</span><span class="mi">100</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="n">track_performance</span> <span class="o">=</span> <span class="mi">0</span>
+</code></pre></div>    </div>
+
+  </div>
+</details>
+
+<p>그러나 \(Q^{\pi}\)와 \(V^{\pi}\)를 표현하는 신경망을 따로 가지고 있는다면 낭비다. 다소 부정확할지라도 \(Q^{\pi}\)로 \(V^{\pi}\)를 표현하거나 \(V^{\pi}\)를 \(Q^{\pi}\)로 표현해 방법론을 단순하게 만들어야 좋다. 이런 맥락에서는 \(Q^{\pi}\)를 \(V^{\pi}\)의 관점으로 표현한다. 이렇게 말이다.</p>
+
+\[Q^{\pi}(s_t, a_t) \approx r_t + V^{\pi}(s_{t+1})\]
+
+<p>좌변과 우변은 다른 양이다. \(s_t\)에서 \(a_t\)를 했을지라도 놓이게 되는 다음 상태 \(s_{t+1}\)은 달라질 수 있기 때문이다. 정확히는 이렇게 기술해야 옳다.</p>
+
+\[Q^{\pi}(s_t, a_t) = \mathbb{E}_{s_{t+1}} \left[ r_t + V^{\pi}(s_{t+1})\right]\]
+
+<p>독자들 스스로 이 등식과 근사식의 함의를 고찰해보길 바란다. \(Q^{\pi}\)와 \(V^{\pi}\)의 정의를 상기하며 두 함수가 어떤 관계로 엮여있을지 찬찬히 생각해보면 된다. \(V^{\pi}\)를 \(Q^{\pi}\)의 기댓값으로 표현할 수도 있다. 이런 관점은 이미 <a href="/rl-story-1/">지난 이야기</a>에서 등장했었다.</p>
+
+<details id="inside">
+<summary>Talk is cheap. Show me the code. ┓ </summary>
+<div>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">gym</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="n">nn</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="p">.</span><span class="n">make</span><span class="p">(</span><span class="s">"CartPole-v1"</span><span class="p">)</span>
+
+<span class="n">STATE_DIM</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">observation_space</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">HIDDEN_DIM</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">ACTION_DIM</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">action_space</span><span class="p">.</span><span class="n">n</span>
+<span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.0001</span>
+
+<span class="k">def</span> <span class="nf">to_tensor</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">array</span><span class="p">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">calculate_returns</span><span class="p">(</span><span class="n">rewards</span><span class="p">):</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">returns</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rewards</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="n">r</span>
+        <span class="n">returns</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">returns</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">policy</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">ACTION_DIM</span><span class="p">),</span>
+                       <span class="n">nn</span><span class="p">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">v</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
+                  <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="n">optimizer_actor</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">policy</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="n">LEARNING_RATE</span><span class="p">)</span>
+<span class="n">optimizer_critic</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">LEARNING_RATE</span><span class="p">)</span>
+
+<span class="n">track_performance</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">):</span>
+    <span class="n">STATE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">NEXT_STATE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ACTION_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">REWARD_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">DONE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Interacting with the environment. (i.e. Generating single trajectory.)
+</span>    <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+        <span class="n">action_probs</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">to_tensor</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+        <span class="n">sampled_action</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">action_probs</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">step</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
+
+        <span class="n">STATE_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">NEXT_STATE_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_state</span><span class="p">)</span>
+        <span class="n">ACTION_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
+        <span class="n">REWARD_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
+        <span class="n">DONE_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">done</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
+
+    <span class="c1"># Concatenation to tensors.
+</span>    <span class="n">STATE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">STATE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">NEXT_STATE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">NEXT_STATE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">ACTION_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">ACTION_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nb">long</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">REWARD_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">RETURN_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">calculate_returns</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">DONE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">DONE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="s">"""
+    Critic V Learning Phase
+    """</span>
+    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
+</span>    <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
+    <span class="n">single_true_cumulative_rewards</span> <span class="o">=</span> <span class="n">RETURN_TENSORS</span>
+    <span class="n">critic_loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">single_true_cumulative_rewards</span><span class="p">).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+    <span class="c1"># Optimization as usual.
+</span>    <span class="n">optimizer_critic</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">critic_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer_critic</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="s">"""
+    Actor (Policy) Learning Phase
+    """</span>
+    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
+</span>    <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
+    <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">likelihoods</span><span class="p">)</span> <span class="c1"># As if it were a supervised learning problem.
+</span>    <span class="n">assignmented_credits</span> <span class="o">=</span> <span class="n">REWARD_TENSORS</span> <span class="o">+</span> <span class="n">v</span><span class="p">(</span><span class="n">NEXT_STATE_TENSORS</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">DONE_TENSORS</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
+    <span class="n">weighted_log_likelihoods</span> <span class="o">=</span> <span class="n">log_likelihoods</span> <span class="o">*</span> <span class="n">assignmented_credits</span>
+
+    <span class="c1"># Optimization as usual.
+</span>    <span class="n">pseudo_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">weighted_log_likelihoods</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">pseudo_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="c1"># Keeping track of performace of the algorithm.
+</span>    <span class="n">track_performance</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">f"</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">th Trial -&gt; </span><span class="si">{</span><span class="n">track_performance</span><span class="o">/</span><span class="mi">100</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="n">track_performance</span> <span class="o">=</span> <span class="mi">0</span>
+</code></pre></div>    </div>
+
+  </div>
+</details>
+
+<p>정리해보자. 괄호 안에 무엇을 넣어야 더 나은 기여도 할당이 가능할지 생각해 보았다.</p>
+
+\[\sum_t (\ \ \ ) \log \pi_{\theta}(a_t|s_t)\]
+
+<p>첫 번째로는 누적 보상의 기댓값인 \(Q^{\pi}(s_t, a_t)\)가 있었고, 두 번째로는 행위의 좋고 나쁨을 상대적으로 고려할 수 있도록 \(V^{\pi}(s_t)\)와의 차이를 계산한 \(Q^{\pi}(s_t, a_t)\) \(- V^{\pi}(s_t)\)가 있었다. 두 번째 양을 Advantage라 부르고 이 양을 이용한 Policy Gradient 방법론에는 Advantage Actor-Critic (A2C)라는 이름이 붙어있다. A2C를 CPU의 여러 쓰레드에서 병렬적 + 비동기적으로 돌리자는 아이디어가 그 유명한 <a href="https://arxiv.org/abs/160201783">A3C</a> 되시겠다.</p>
+
+\[A^{\pi}(s_t, a_t) = Q^{\pi}(s_t, a_t)  - V^{\pi}(s_t)\]
+
+<p>신경망을 \(Q^{\pi}\) 따로 \(V^{\pi}\) 따로 사용할 수 없으니 Advantage의 근사로서는 일반적으로 \(r_t + V^{\pi}(s_{t+1}) - V^{\pi}(s_{t})\)를 사용한다고 했다. 이를 조금 더 일반화하여 여러 방식으로 Advantage를 표현할 수 있다. 관심있는 독자는 <a href="https://arxiv.org/abs/1506.02438">GAE</a>를 읽어보면 좋다. 이후 맥락에서 \({\hat{A_t}}\)라는 기호가 나온다면 무언가 한 가지 방법으로 Advantage를 추정한 값이라 이해하면 된다.</p>
+
+<p>가치 함수를 도입했다고 지난 이야기의 말미에 등장했던 문제점들이 해결되는건 아니다. 받는 보상이 없으면 정답도 항상 \(0\)이다. 그러면 가치 함수는 \(0\)을 뱉는 방법을 학습한다. 진정한 무가치 함수로 거듭난다. 쇼펜하우어가 따로 없다. 혹시 무가치 함수가 필요하다면 시도해 보자.</p>
+:ET

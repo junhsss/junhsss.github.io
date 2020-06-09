@@ -160,7 +160,7 @@ p {
 
 a {
   font-weight: 200;
-  color: #4183C4;
+  color: #7F4BF0;
   text-decoration: none;
   cursor: pointer;
 }
@@ -1216,8 +1216,8 @@ code {
 
 summary {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 200;
-  font-size: 20px;
+  font-weight: 300;
+  font-size: 21px;
   text-align: center;
   color: #7F4BF0;
   font-style: italic;

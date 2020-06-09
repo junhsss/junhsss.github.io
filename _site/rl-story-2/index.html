@@ -120,13 +120,19 @@
                        <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">ACTION_DIM</span><span class="p">),</span>
                        <span class="n">nn</span><span class="p">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
 
+<span class="s">"""
+Note that it's handy if we implement Q in the form of Q(s)[a] when the action space is discrete. 
+We could still implement Q as Q(s, a), but it's unnecessary. (one-hot encode actions or whatever.)
+This sutblety will be elaborated further later. It's key difference between DQN-like and DDPQ-like algorithms.
+"""</span>
 <span class="n">q</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
                   <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
                   <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
                   <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
                   <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">ACTION_DIM</span><span class="p">))</span>
 
-<span class="n">optimizer_actor</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">policy</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="n">LEARNING_RATE</span><span class="p">)</span>
+<span class="c1"># We need separate optimizers for actor and critic respectively.
+</span><span class="n">optimizer_actor</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">policy</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="n">LEARNING_RATE</span><span class="p">)</span>
 <span class="n">optimizer_critic</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">LEARNING_RATE</span><span class="p">)</span>
 
 <span class="n">track_performance</span> <span class="o">=</span> <span class="mi">0</span>
@@ -135,55 +141,57 @@
     <span class="n">ACTION_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">REWARD_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># Interacting with the environment. (i.e. Generating single trajectory.)
-</span>    <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
     <span class="n">done</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="c1"># Deactivate PyTorch autograd engine as we don't need to compute gradient here.
+</span>    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span> 
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+            <span class="n">action_probs</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">to_tensor</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+            <span class="n">sampled_action</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">action_probs</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="n">item</span><span class="p">()</span>
+            <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">step</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
 
-    <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
-        <span class="n">action_probs</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">to_tensor</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
-        <span class="n">sampled_action</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">action_probs</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="n">item</span><span class="p">()</span>
-        <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">step</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
+            <span class="n">STATE_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="n">ACTION_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
+            <span class="n">REWARD_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
 
-        <span class="n">STATE_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="n">ACTION_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
-        <span class="n">REWARD_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
 
-        <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
-
-    <span class="c1"># Concatenation to tensors.
-</span>    <span class="n">STATE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">STATE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">STATE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">STATE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
     <span class="n">ACTION_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">ACTION_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nb">long</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">RETURN_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">calculate_returns</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">RETURN_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">calculate_returns</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">),</span>\
+                                  <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="s">"""
-    Critic (Value) Learning Phase
+    Critic (State-action value) learning phase
     """</span>
-    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
+    <span class="c1"># Q(s)[a] ≈ cumulative rewards after a in s.
 </span>    <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
     <span class="n">single_true_cumulative_rewards</span> <span class="o">=</span> <span class="n">RETURN_TENSORS</span>
     <span class="n">critic_loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">single_true_cumulative_rewards</span><span class="p">).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
-    <span class="c1"># Optimization as usual.
-</span>    <span class="n">optimizer_critic</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+    <span class="n">optimizer_critic</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
     <span class="n">critic_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
     <span class="n">optimizer_critic</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
 
     <span class="s">"""
-    Actor (Policy) Learning Phase
+    Actor (Policy) learning phase
     """</span>
-    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
-</span>    <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
-    <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">likelihoods</span><span class="p">)</span> <span class="c1"># As if it were a supervised learning problem.
-</span>    <span class="n">assignmented_credits</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
-    <span class="n">weighted_log_likelihoods</span> <span class="o">=</span> <span class="n">log_likelihoods</span> <span class="o">*</span> <span class="n">assignmented_credits</span>
+    <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
+    <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">likelihoods</span><span class="p">)</span> 
 
-    <span class="c1"># Optimization as usual.
-</span>    <span class="n">pseudo_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">weighted_log_likelihoods</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="c1"># Log-likelihoods are now weighted by the state-action values calculated from q. i.e. Q(s)[a]
+</span>    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">assigned_credits</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
+
+    <span class="n">weighted_log_likelihoods</span> <span class="o">=</span> <span class="n">log_likelihoods</span> <span class="o">*</span> <span class="n">assigned_credits</span>
+
+    <span class="n">pseudo_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">weighted_log_likelihoods</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
     <span class="n">pseudo_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
     <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
 
-    <span class="c1"># Keeping track of performace of the algorithm.
-</span>    <span class="n">track_performance</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">)</span>
+
+    <span class="n">track_performance</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s">f"</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">th Trial -&gt; </span><span class="si">{</span><span class="n">track_performance</span><span class="o">/</span><span class="mi">100</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
@@ -215,7 +223,11 @@
 <summary>Talk is cheap. Show me the code. ┓ </summary>
 <div>
 
-    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">gym</span>
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""
+Note that we NEVER do this in practice. 
+Just a pedagogical practice. :)
+"""</span>
+<span class="kn">import</span> <span class="nn">gym</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="n">nn</span>
 
@@ -240,7 +252,8 @@
         <span class="n">returns</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">returns</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-<span class="n">policy</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+<span class="c1"># We now need 3 neural nets and optimizers. 
+</span><span class="n">policy</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
                        <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
                        <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
                        <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
@@ -252,7 +265,6 @@
                   <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
                   <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
                   <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">ACTION_DIM</span><span class="p">))</span>
-
 
 <span class="n">v</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
                   <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
@@ -270,67 +282,65 @@
     <span class="n">ACTION_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">REWARD_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># Interacting with the environment. (i.e. Generating single trajectory.)
-</span>    <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
     <span class="n">done</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+            <span class="n">action_probs</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">to_tensor</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+            <span class="n">sampled_action</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">action_probs</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="n">item</span><span class="p">()</span>
+            <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">step</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
 
-    <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
-        <span class="n">action_probs</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">to_tensor</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
-        <span class="n">sampled_action</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">action_probs</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="n">item</span><span class="p">()</span>
-        <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">step</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
+            <span class="n">STATE_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="n">ACTION_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
+            <span class="n">REWARD_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
 
-        <span class="n">STATE_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="n">ACTION_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">sampled_action</span><span class="p">)</span>
-        <span class="n">REWARD_MEMORY</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
 
-        <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
-
-    <span class="c1"># Concatenation to tensors.
-</span>    <span class="n">STATE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">STATE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">STATE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">STATE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
     <span class="n">ACTION_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">ACTION_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nb">long</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">RETURN_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">calculate_returns</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="s">"""
     Critic Q Learning Phase
     """</span>
-    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
-</span>    <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
+    <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
     <span class="n">single_true_cumulative_rewards</span> <span class="o">=</span> <span class="n">RETURN_TENSORS</span>
     <span class="n">critic_q_loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">single_true_cumulative_rewards</span><span class="p">).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
-    <span class="c1"># Optimization as usual.
-</span>    <span class="n">optimizer_critic_q</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    
+    <span class="n">optimizer_critic_q</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
     <span class="n">critic_q_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
     <span class="n">optimizer_critic_q</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
 
     <span class="s">"""
     Critic V Learning Phase
     """</span>
-    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
+    <span class="c1"># Almost identical
 </span>    <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
     <span class="n">single_true_cumulative_rewards</span> <span class="o">=</span> <span class="n">RETURN_TENSORS</span>
     <span class="n">critic_v_loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">single_true_cumulative_rewards</span><span class="p">).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
-    <span class="c1"># Optimization as usual.
-</span>    <span class="n">optimizer_critic_v</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+    <span class="n">optimizer_critic_v</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
     <span class="n">critic_v_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
     <span class="n">optimizer_critic_v</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
 
     <span class="s">"""
     Actor (Policy) Learning Phase
     """</span>
-    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
-</span>    <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
-    <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">likelihoods</span><span class="p">)</span> <span class="c1"># As if it were a supervised learning problem.
-</span>    <span class="n">assignmented_credits</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
+    <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
+    <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">likelihoods</span><span class="p">)</span> 
+
+    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">assignmented_credits</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
+
     <span class="n">weighted_log_likelihoods</span> <span class="o">=</span> <span class="n">log_likelihoods</span> <span class="o">*</span> <span class="n">assignmented_credits</span>
 
-    <span class="c1"># Optimization as usual.
-</span>    <span class="n">pseudo_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">weighted_log_likelihoods</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">pseudo_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">weighted_log_likelihoods</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
     <span class="n">pseudo_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
     <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
 
-    <span class="c1"># Keeping track of performace of the algorithm.
-</span>    <span class="n">track_performance</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">)</span>
+
+    <span class="n">track_performance</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">REWARD_MEMORY</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s">f"</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">th Trial -&gt; </span><span class="si">{</span><span class="n">track_performance</span><span class="o">/</span><span class="mi">100</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
@@ -397,16 +407,15 @@
 
 <span class="n">track_performance</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">):</span>
-    <span class="n">STATE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Note that we now need two more memory lists.
+</span>    <span class="n">STATE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">NEXT_STATE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">ACTION_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">REWARD_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">DONE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># Interacting with the environment. (i.e. Generating single trajectory.)
-</span>    <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
     <span class="n">done</span> <span class="o">=</span> <span class="bp">False</span>
-
     <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
         <span class="n">action_probs</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">to_tensor</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
         <span class="n">sampled_action</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">action_probs</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="n">item</span><span class="p">()</span>
@@ -420,7 +429,7 @@
 
         <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
 
-    <span class="c1"># Concatenation to tensors.
+    <span class="c1"># Concatenation to tensors. I know. It's ugly :(
 </span>    <span class="n">STATE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">STATE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
     <span class="n">NEXT_STATE_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">NEXT_STATE_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
     <span class="n">ACTION_TENSORS</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">ACTION_MEMORY</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nb">long</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
@@ -431,22 +440,27 @@
     <span class="s">"""
     Critic V Learning Phase
     """</span>
-    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
-</span>    <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
+    <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
     <span class="n">single_true_cumulative_rewards</span> <span class="o">=</span> <span class="n">RETURN_TENSORS</span>
     <span class="n">critic_loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">single_true_cumulative_rewards</span><span class="p">).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
-    <span class="c1"># Optimization as usual.
-</span>    <span class="n">optimizer_critic</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+    <span class="n">optimizer_critic</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
     <span class="n">critic_loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
     <span class="n">optimizer_critic</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
 
     <span class="s">"""
     Actor (Policy) Learning Phase
     """</span>
-    <span class="c1"># Cumulative-rewards weighted version of negative log likelihoods.
-</span>    <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
-    <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">likelihoods</span><span class="p">)</span> <span class="c1"># As if it were a supervised learning problem.
-</span>    <span class="n">assignmented_credits</span> <span class="o">=</span> <span class="n">REWARD_TENSORS</span> <span class="o">+</span> <span class="n">v</span><span class="p">(</span><span class="n">NEXT_STATE_TENSORS</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">DONE_TENSORS</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
+    <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
+    <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">likelihoods</span><span class="p">)</span>
+
+    <span class="c1"># We approximate Q(s)[a] (Current State-Action Value) with r+V(s') (Reward + Next State Value)
+</span>    <span class="c1"># Note that it's not accurate Q value even when V is 100% accurate.
+</span>    <span class="c1"># Simple but crucial implementation trick is presented
+</span>    <span class="c1">#   : "Truncate next state value when it's terminal state."
+</span>    <span class="c1"># There's no life (hence no values) after death, at least in the CartPole environment.
+</span>    <span class="n">assignmented_credits</span> <span class="o">=</span> <span class="n">REWARD_TENSORS</span> <span class="o">+</span> <span class="n">v</span><span class="p">(</span><span class="n">NEXT_STATE_TENSORS</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">DONE_TENSORS</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
+
     <span class="n">weighted_log_likelihoods</span> <span class="o">=</span> <span class="n">log_likelihoods</span> <span class="o">*</span> <span class="n">assignmented_credits</span>
 
     <span class="c1"># Optimization as usual.
