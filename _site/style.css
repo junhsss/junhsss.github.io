@@ -1217,7 +1217,7 @@ code {
 summary {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 300;
-  font-size: 21px;
+  font-size: 20px;
   text-align: center;
   color: #7F4BF0;
   font-style: italic;
@@ -1237,10 +1237,6 @@ summary:before {
   content: '┗ ';
   color: #7F4BF0;
   margin-right: 5px;
-}
-
-#inside {
-  margin-bottom: 80px;
 }
 
 /*# sourceMappingURL=style.css.map */
