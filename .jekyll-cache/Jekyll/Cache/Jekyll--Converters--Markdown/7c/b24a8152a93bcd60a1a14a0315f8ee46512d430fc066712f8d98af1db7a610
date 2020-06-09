@@ -1,61 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>강화 학습 이야기 1</title>
-
-        <meta charset="utf-8" />
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
-
-    
-    <meta name="description" content="자, 신경망을 학습시켜 보자. 먼저 호랑이의 형상이 담겨있는 픽셀 덩어리를 먹인다. 먹은 덩어리가 호랑이라는 범주에 속한다고 얼마나 확신하고 있는지 엿본다. 그 수치가 높아지도록 파라미터를 살짝 건드려준다. 그러면 끝이다. 먹어보았던 것이 무엇인지 알게 되도록 지도해주는 셈이다. 그래서 지도 학습이다. 먹어보지 않은 것까지 알게되는 마법이 일어나기를 바란다면 정화수를 떠놓고 비는 수 밖엔 없다. 정말이다.
-" />
-    <meta property="og:description" content="자, 신경망을 학습시켜 보자. 먼저 호랑이의 형상이 담겨있는 픽셀 덩어리를 먹인다. 먹은 덩어리가 호랑이라는 범주에 속한다고 얼마나 확신하고 있는지 엿본다. 그 수치가 높아지도록 파라미터를 살짝 건드려준다. 그러면 끝이다. 먹어보았던 것이 무엇인지 알게 되도록 지도해주는 셈이다. 그래서 지도 학습이다. 먹어보지 않은 것까지 알게되는 마법이 일어나기를 바란다면 정화수를 떠놓고 비는 수 밖엔 없다. 정말이다.
-" />
-    
-    <meta name="author" content="JunHyoung Ryu's Blog" />
-
-    
-    <meta property="og:title" content="강화 학습 이야기 1" />
-    <meta property="twitter:title" content="강화 학습 이야기 1" />
-    
-
-    <!--[if lt IE 9]>
-      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <link rel="stylesheet" type="text/css" href="/style.css" />
-    <link rel="alternate" type="application/rss+xml" title="JunHyoung Ryu's Blog - zero-calorie ideas." href="/feed.xml" />
-
-    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
-  </head>
-
-  <body>
-    <div class="wrapper-masthead">
-      <div class="container">
-        <header class="masthead clearfix">
-          <a href="/" class="site-avatar"><img src="/images/jekyll-logo.png" /></a>
-
-          <div class="site-info">
-            <h1 class="site-name"><a href="/">JunHyoung Ryu's Blog</a></h1>
-            <p class="site-description">zero-calorie ideas.</p>
-          </div>
-
-          <nav>
-            <a href="/about" class="about">About</a>
-          </nav>
-        </header>
-      </div>
-    </div>
-
-    <div id="main" role="main" class="container">
-      <article class="post">
-  <h1>강화 학습 이야기 1</h1>
-
-
-  <div class="entry">
-    <p>자, 신경망을 학습시켜 보자. 먼저 호랑이의 형상이 담겨있는 픽셀 덩어리를 먹인다. 먹은 덩어리가 호랑이라는 범주에 속한다고 얼마나 확신하고 있는지 엿본다. 그 수치가 높아지도록 파라미터를 살짝 건드려준다. 그러면 끝이다. 먹어보았던 것이 무엇인지 알게 되도록 지도해주는 셈이다. 그래서 지도 학습이다. 먹어보지 않은 것까지 알게되는 마법이 일어나기를 바란다면 정화수를 떠놓고 비는 수 밖엔 없다. 정말이다.</p>
+I"]u<p>자, 신경망을 학습시켜 보자. 먼저 호랑이의 형상이 담겨있는 픽셀 덩어리를 먹인다. 먹은 덩어리가 호랑이라는 범주에 속한다고 얼마나 확신하고 있는지 엿본다. 그 수치가 높아지도록 파라미터를 살짝 건드려준다. 그러면 끝이다. 먹어보았던 것이 무엇인지 알게 되도록 지도해주는 셈이다. 그래서 지도 학습이다. 먹어보지 않은 것까지 알게되는 마법이 일어나기를 바란다면 정화수를 떠놓고 비는 수 밖엔 없다. 정말이다.</p>
 
 <p>강화 학습에서는 이런 신탁을 내려줄 미지의 지적 존재를 가정하지 않는다. 확신이 얼마나 타당했는지 학습 주체 스스로 판단해야 한다. 무엇이 옳고 그른지 판단할 근거가 아예 없다면 행동을 교정할 수 있을 턱이 없다. 그래서 보상이라는 신호가 주어진다.</p>
 
@@ -89,7 +32,11 @@
 <summary>Talk is cheap. Show me the code. ┓ </summary>
 <div>
 
-    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">gym</span>
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""
+Note that there will be large degree of redundancy around every codes.
+It would be beneficial if you try to distinguish between codes.
+"""</span>
+<span class="kn">import</span> <span class="nn">gym</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="n">nn</span>
 
@@ -224,88 +171,4 @@
 <p>그러나 제아무리 인간이라도 아예 듣지도 보지도 못한 무언가를 알 수는 없는 법이다. 그러한 상황에서는 인간도 찍어 먹어보아야 안다. 아무리 그래도 전부 찍어 먹어볼 수는 없다. 인생은 짧다. 체계적인 찍어먹기를 위해서는 경험 외적의 지식이 필요하다. 개체의 수준에서 종의 수준으로 논의를 확장해야 한다. <a href="https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(19)30061-0">개체의 빠른 학습은 종이 오랜 시간 쌓아 온 선험적 지식에 의존한다</a>. 인류의 선험적 지식은 문화의 형태로 존재하기도 하고 진화를 거쳐 유전자의 형태로 존재하기도 한다. 이에 상응하는 알고리즘이 필요하다. 단순히 생각하면 <a href="http://proceedings.mlr.press/v48/santoro16.pdf">문화는 데이터베이스로</a>, <a href="https://arxiv.org/abs/1703.03400">유전자는 신경망 가중치의 초깃값 따위로</a> 구현하면 될 법도 하다. 이런 아이디어들을 메타 학습이라고 부른다. 아주 핫하다.</p>
 
 <p>이 이야기의 끝맺음은 정해져 있다. 환경과 상호 작용이 불가능한 상황에서 누군가가 만들어 놓은 데이터로 학습하는 방법론에 대한 이야기다. 찍어 먹기는 아예 금기로 간주한다. 대단히 까다로운 상황이다. 그러나 <a href="https://github.com/openai/gpt-3">언어</a>와 <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">시각</a>에 내렸던 딥러닝의 은총이 강화 학습에도 내리게 하기 위해서는 반드시 풀어야 할 문제이다. 찍어 먹어볼 것을 전제하는 강화 학습은 Scalable하지 않다. 최근에서야 이러한 방법론들의 <a href="https://arxiv.org/abs/2004.07219">벤치마크를 위한 데이터베이스</a>를 구성하기 시작했다. 언제나 좋은 신호탄이다. <a href="https://newsight.tistory.com/302">계산이 우리를 자유케 하리라</a>.</p>
-
-  </div>
-
-  <div class="date">
-    20년 6월의 기록
-  </div>
-
-
-  
-<div class="comments">
-	<div id="disqus_thread"></div>
-	<script type="text/javascript">
-
-	    var disqus_shortname = 'junhsss-github-io';
-
-	    (function() {
-	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	    })();
-
-	</script>
-	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-
-
-  
-    <div id="disqus_thread"></div>
-    <script>
-
-      /**
-      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-      var disqus_config = function () {
-        this.page.url = "http://localhost:4000/rl-story-1/";
-        this.page.identifier = "강화 학습 이야기 1";
-      };
-
-      (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = 'https://junhsss-github-io.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                                
-  
-</article>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-    </div>
-    <!--
-    <div class="wrapper-footer">
-      <div class="container">
-        <footer class="footer">
-          
-
-
-
-<a href="https://github.com/barryclark/jekyll-now"><i class="svg-icon github"></i></a>
-
-
-
-
-<a href="https://www.twitter.com/jekyllrb"><i class="svg-icon twitter"></i></a>
-
-
-
-        </footer>
-      </div>
-    </div>
-    -->
-
-    
-
-  </body>
-</html>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+:ET
