@@ -1,61 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>강화 학습 이야기 2</title>
-
-        <meta charset="utf-8" />
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
-
-    
-    <meta name="description" content="도대체 이게 무슨 탁상 공론인가? 미래에 받을 수 있는 누적 보상의 기댓값이라니. 가능한 미래들을 전부 열거해 보기라도 하겠다는 말인가? 지난 이야기를 읽으며 이런 생각이 들었다면 정상이다. 가치 함수가 바로 그렇게 정의되는 양이다. 정책 \(\pi\)가 어떤 행동을 해야 하는지 알려준다면 가치 함수는 그러한 행동 이후에 얼마만큼의 누적 보상을 기대할 수 있는지 알려준다. 정의를 되짚어보자.
-" />
-    <meta property="og:description" content="도대체 이게 무슨 탁상 공론인가? 미래에 받을 수 있는 누적 보상의 기댓값이라니. 가능한 미래들을 전부 열거해 보기라도 하겠다는 말인가? 지난 이야기를 읽으며 이런 생각이 들었다면 정상이다. 가치 함수가 바로 그렇게 정의되는 양이다. 정책 \(\pi\)가 어떤 행동을 해야 하는지 알려준다면 가치 함수는 그러한 행동 이후에 얼마만큼의 누적 보상을 기대할 수 있는지 알려준다. 정의를 되짚어보자.
-" />
-    
-    <meta name="author" content="JunHyoung Ryu's Blog" />
-
-    
-    <meta property="og:title" content="강화 학습 이야기 2" />
-    <meta property="twitter:title" content="강화 학습 이야기 2" />
-    
-
-    <!--[if lt IE 9]>
-      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <link rel="stylesheet" type="text/css" href="/style.css" />
-    <link rel="alternate" type="application/rss+xml" title="JunHyoung Ryu's Blog - zero-calorie ideas." href="/feed.xml" />
-
-    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
-  </head>
-
-  <body>
-    <div class="wrapper-masthead">
-      <div class="container">
-        <header class="masthead clearfix">
-          <a href="/" class="site-avatar"><img src="/images/jekyll-logo.png" /></a>
-
-          <div class="site-info">
-            <h1 class="site-name"><a href="/">JunHyoung Ryu's Blog</a></h1>
-            <p class="site-description">zero-calorie ideas.</p>
-          </div>
-
-          <nav>
-            <a href="/about" class="about">About</a>
-          </nav>
-        </header>
-      </div>
-    </div>
-
-    <div id="main" role="main" class="container">
-      <article class="post">
-  <h1>강화 학습 이야기 2</h1>
-
-
-  <div class="entry">
-    <p>도대체 이게 무슨 탁상 공론인가? 미래에 받을 수 있는 누적 보상의 기댓값이라니. 가능한 미래들을 전부 열거해 보기라도 하겠다는 말인가? <a href="/rl-story-1/">지난 이야기</a>를 읽으며 이런 생각이 들었다면 정상이다. 가치 함수가 바로 그렇게 정의되는 양이다. 정책 \(\pi\)가 어떤 행동을 해야 하는지 알려준다면 가치 함수는 그러한 행동 이후에 얼마만큼의 누적 보상을 기대할 수 있는지 알려준다. 정의를 되짚어보자.</p>
+I"&�<p>도대체 이게 무슨 탁상 공론인가? 미래에 받을 수 있는 누적 보상의 기댓값이라니. 가능한 미래들을 전부 열거해 보기라도 하겠다는 말인가? <a href="/rl-story-1/">지난 이야기</a>를 읽으며 이런 생각이 들었다면 정상이다. 가치 함수가 바로 그렇게 정의되는 양이다. 정책 \(\pi\)가 어떤 행동을 해야 하는지 알려준다면 가치 함수는 그러한 행동 이후에 얼마만큼의 누적 보상을 기대할 수 있는지 알려준다. 정의를 되짚어보자.</p>
 
 <ul>
   <li>상태 \(s\)에서 행위 \(a\)를 했을 때 미래에 받을 수 있는 누적 보상의 기댓값을 \(Q(s, a)\),</li>
@@ -120,10 +63,11 @@
                        <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">ACTION_DIM</span><span class="p">),</span>
                        <span class="n">nn</span><span class="p">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
 
-<span class="c1"># Note that it's handy if we implement Q in the form of Q(s)[a] when the action space is discrete. 
-# We could still implement Q as Q(s, a), but it's unnecessary. (one-hot encode actions or whatever.)
-# This sutblety will be elaborated further later. It's a key difference between DQN-like and DDPQ-like algorithms.
-</span><span class="n">q</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
+<span class="c1">#Note that it's handy if we implement Q in the form of Q(s)[a] when the action space is discrete. 
+#We could still implement Q as Q(s, a), but it's unnecessary. (one-hot encode actions or whatever.)
+#This sutblety will be elaborated further later. It's key difference between DQN-like and DDPQ-like algorithms.
+</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">STATE_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
                   <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
                   <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">HIDDEN_DIM</span><span class="p">),</span>
                   <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
@@ -489,88 +433,4 @@ Just a pedagogical practice. :)
 <p>신경망을 \(Q^{\pi}\) 따로 \(V^{\pi}\) 따로 사용할 수 없으니 Advantage의 근사로서는 일반적으로 \(r_t + V^{\pi}(s_{t+1}) - V^{\pi}(s_{t})\)를 사용한다고 했다. 이를 조금 더 일반화하여 여러 방식으로 Advantage를 표현할 수 있다. 관심있는 독자는 <a href="https://arxiv.org/abs/1506.02438">GAE</a>를 읽어보면 좋다. 이후 맥락에서 \({\hat{A_t}}\)라는 기호가 나온다면 무언가 한 가지 방법으로 Advantage를 추정한 값이라 이해하면 된다.</p>
 
 <p>가치 함수를 도입했다고 지난 이야기의 말미에 등장했던 문제점들이 해결되는건 아니다. 받는 보상이 없으면 정답도 항상 \(0\)이다. 그러면 가치 함수는 \(0\)을 뱉는 방법을 학습한다. 진정한 무가치 함수로 거듭난다. 쇼펜하우어가 따로 없다. 혹시 무가치 함수가 필요하다면 시도해 보자.</p>
-
-  </div>
-
-  <div class="date">
-    20년 6월의 기록
-  </div>
-
-
-  
-<div class="comments">
-	<div id="disqus_thread"></div>
-	<script type="text/javascript">
-
-	    var disqus_shortname = 'junhsss-github-io';
-
-	    (function() {
-	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	    })();
-
-	</script>
-	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-
-
-  
-    <div id="disqus_thread"></div>
-    <script>
-
-      /**
-      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-      var disqus_config = function () {
-        this.page.url = "http://localhost:4000/rl-story-2/";
-        this.page.identifier = "강화 학습 이야기 2";
-      };
-
-      (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = 'https://junhsss-github-io.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                                
-  
-</article>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-    </div>
-    <!--
-    <div class="wrapper-footer">
-      <div class="container">
-        <footer class="footer">
-          
-
-
-
-<a href="https://github.com/barryclark/jekyll-now"><i class="svg-icon github"></i></a>
-
-
-
-
-<a href="https://www.twitter.com/jekyllrb"><i class="svg-icon twitter"></i></a>
-
-
-
-        </footer>
-      </div>
-    </div>
-    -->
-
-    
-
-  </body>
-</html>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+:ET
