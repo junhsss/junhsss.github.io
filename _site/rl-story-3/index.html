@@ -365,7 +365,7 @@ Everything is identical but the discount factor.
     <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
     <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">likelihoods</span><span class="p">)</span>
 
-    <span class="k">with</span> <span class="n">torcn</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span>
         <span class="n">assigned_credits</span> <span class="o">=</span> <span class="n">REWARD_TENSORS</span> <span class="o">+</span> <span class="n">GAMMA</span><span class="o">*</span><span class="n">v</span><span class="p">(</span><span class="n">NEXT_STATE_TENSORS</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">DONE_TENSORS</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
 
     <span class="n">weighted_log_likelihoods</span> <span class="o">=</span> <span class="n">log_likelihoods</span> <span class="o">*</span> <span class="n">assigned_credits</span>

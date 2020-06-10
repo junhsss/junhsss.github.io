@@ -1,4 +1,4 @@
-I"��<p>가치 함수에는 강력한 재귀적 구조가 존재한다. 못 보고 지나치면 내 손해, 아니 CPU 손해다. 심미적 관점에서도 낭비다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.</p>
+I"��<p>가치 함수에는 강력한 재귀적 구조가 존재한다. 못 보고 지나치면 내 손해, 아니 CPU 손해다. 심미적 관점에서도 낭비다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.</p>
 
 <p>상황에 대한 가치함수 \(V^{\pi}\)를 생각해보자. 행위자가 상황 \(s\)에서 행동 \(a\)를 하면 보상 \(r\)를 받고 \(s'\)라는 상황에 놓인다. 원래 상황의 가치 \(V^{\pi}(s)\)와 바뀐 상황의 가치 \(V^{\pi}(s')\) 사이에는 어떤 관계가 존재할까? 두 상태가 시간적으로 매우 가까우므로 크게 다르다면 어색하다. 현재 상황에서 보상 \(r\)을 받고 다음 상황 \(s'\)로 넘어갔으니 이렇게 쓸 수 있다.</p>
 
@@ -92,8 +92,9 @@
 <span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="p">.</span><span class="n">make</span><span class="p">(</span><span class="s">"CartPole-v1"</span><span class="p">)</span>
 
 <span class="n">STATE_DIM</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">observation_space</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">HIDDEN_DIM</span> <span class="o">=</span> <span class="mi">200</span>
 <span class="n">ACTION_DIM</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">action_space</span><span class="p">.</span><span class="n">n</span>
+
+<span class="n">HIDDEN_DIM</span> <span class="o">=</span> <span class="mi">200</span>
 <span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.0001</span>
 
 <span class="k">def</span> <span class="nf">to_tensor</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
@@ -125,7 +126,6 @@
     <span class="n">ACTION_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">REWARD_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">DONE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
-
 
     <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
     <span class="n">done</span> <span class="o">=</span> <span class="bp">False</span>
@@ -169,8 +169,11 @@
     """</span>
     <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
     <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">likelihoods</span><span class="p">)</span>
-    <span class="n">assignmented_credits</span> <span class="o">=</span> <span class="n">REWARD_TENSORS</span> <span class="o">+</span> <span class="n">v</span><span class="p">(</span><span class="n">NEXT_STATE_TENSORS</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">DONE_TENSORS</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
-    <span class="n">weighted_log_likelihoods</span> <span class="o">=</span> <span class="n">log_likelihoods</span> <span class="o">*</span> <span class="n">assignmented_credits</span>
+
+    <span class="k">with</span> <span class="n">torcn</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">assigned_credits</span> <span class="o">=</span> <span class="n">REWARD_TENSORS</span> <span class="o">+</span> <span class="n">v</span><span class="p">(</span><span class="n">NEXT_STATE_TENSORS</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">DONE_TENSORS</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
+
+    <span class="n">weighted_log_likelihoods</span> <span class="o">=</span> <span class="n">log_likelihoods</span> <span class="o">*</span> <span class="n">assigned_credits</span>
 
     <span class="n">pseudo_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">weighted_log_likelihoods</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
@@ -218,15 +221,19 @@
 <summary>Talk is cheap. Show me the code. ┓ </summary>
 <div>
 
-    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">gym</span>
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""
+Everything is identical but the discount factor.
+"""</span>
+<span class="kn">import</span> <span class="nn">gym</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="n">nn</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="p">.</span><span class="n">make</span><span class="p">(</span><span class="s">"CartPole-v1"</span><span class="p">)</span>
 
 <span class="n">STATE_DIM</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">observation_space</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">HIDDEN_DIM</span> <span class="o">=</span> <span class="mi">200</span>
 <span class="n">ACTION_DIM</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">action_space</span><span class="p">.</span><span class="n">n</span>
+
+<span class="n">HIDDEN_DIM</span> <span class="o">=</span> <span class="mi">200</span>
 <span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.0001</span>
 <span class="n">GAMMA</span> <span class="o">=</span> <span class="mf">0.99</span>
 
@@ -260,7 +267,6 @@
     <span class="n">REWARD_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">DONE_MEMORY</span> <span class="o">=</span> <span class="p">[]</span>
 
-
     <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
     <span class="n">done</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
@@ -287,9 +293,7 @@
     """</span>
     <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
 
-    <span class="c1"># We now use a target (i.e. an answer) calculated by itself instead of a single culumative return.
-</span>    <span class="c1"># It's often referred to as 'bootstrapped target'.
-</span>    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span>
         <span class="n">target</span> <span class="o">=</span> <span class="n">REWARD_TENSORS</span> <span class="o">+</span> <span class="n">GAMMA</span><span class="o">*</span><span class="n">v</span><span class="p">(</span><span class="n">NEXT_STATE_TENSORS</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">DONE_TENSORS</span><span class="p">)</span>
 
     <span class="n">critic_loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">target</span><span class="p">).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
@@ -303,8 +307,11 @@
     """</span>
     <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ACTION_TENSORS</span><span class="p">)</span>
     <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">likelihoods</span><span class="p">)</span>
-    <span class="n">assignmented_credits</span> <span class="o">=</span> <span class="n">REWARD_TENSORS</span> <span class="o">+</span> <span class="n">GAMMA</span><span class="o">*</span><span class="n">v</span><span class="p">(</span><span class="n">NEXT_STATE_TENSORS</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">DONE_TENSORS</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
-    <span class="n">weighted_log_likelihoods</span> <span class="o">=</span> <span class="n">log_likelihoods</span> <span class="o">*</span> <span class="n">assignmented_credits</span>
+
+    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">assigned_credits</span> <span class="o">=</span> <span class="n">REWARD_TENSORS</span> <span class="o">+</span> <span class="n">GAMMA</span><span class="o">*</span><span class="n">v</span><span class="p">(</span><span class="n">NEXT_STATE_TENSORS</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">DONE_TENSORS</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">(</span><span class="n">STATE_TENSORS</span><span class="p">)</span>
+
+    <span class="n">weighted_log_likelihoods</span> <span class="o">=</span> <span class="n">log_likelihoods</span> <span class="o">*</span> <span class="n">assigned_credits</span>
 
     <span class="n">pseudo_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">weighted_log_likelihoods</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="n">optimizer_actor</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
