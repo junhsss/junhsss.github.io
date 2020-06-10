@@ -160,7 +160,8 @@ p {
 
 a {
   font-weight: 200;
-  color: #7F4BF0;
+  color: #5680e9;
+  /*#7F4BF0*/
   text-decoration: none;
   cursor: pointer;
 }
@@ -859,7 +860,7 @@ code {
 
 /* Generic */
 .highlight .k {
-  color: #fb660a;
+  color: #8860d0;
   font-weight: bold;
 }
 
@@ -870,12 +871,12 @@ code {
 
 /* Literal */
 .highlight .n {
-  color: #440c6e;
+  color: #0c013c;
 }
 
 /* Name */
 .highlight .o {
-  color: #0086f7;
+  color: #5680e9;
 }
 
 /* Operator */
@@ -885,14 +886,14 @@ code {
 
 /* Other */
 .highlight .p {
-  color: #000000;
+  color: #3627ff;
 }
 
 /* Punctuation */
 .highlight .cm {
-  color: #0086f7;
+  color: #ffffff;
   font-style: italic;
-  background-color: #86ff86;
+  background-color: #4a64d7;
 }
 
 /* Comment.Multiline */
@@ -905,16 +906,16 @@ code {
 
 /* Comment.Preproc */
 .highlight .c1 {
-  color: #0086f7;
+  color: #ffffff;
   font-style: italic;
-  background-color: #86ff86;
+  background-color: #4a64d7;
 }
 
 /* Comment.Single */
 .highlight .cs {
-  color: #0086f7;
+  color: #ffffff;
   font-style: italic;
-  background-color: #86ff86;
+  background-color: #4a64d7;
 }
 
 /* Comment.Special */
@@ -972,30 +973,30 @@ code {
 
 /* Generic.Traceback */
 .highlight .kc {
-  color: #fb660a;
+  color: #8860d0;
   font-weight: bold;
 }
 
 /* Keyword.Constant */
 .highlight .kd {
-  color: #fb660a;
+  color: #8860d0;
   font-weight: bold;
 }
 
 /* Keyword.Declaration */
 .highlight .kn {
-  color: #fb660a;
+  color: #8860d0;
   font-weight: bold;
 }
 
 /* Keyword.Namespace */
 .highlight .kp {
-  color: #fb660a;
+  color: #8860d0;
 }
 
 /* Keyword.Pseudo */
 .highlight .kr {
-  color: #fb660a;
+  color: #8860d0;
   font-weight: bold;
 }
 
@@ -1012,7 +1013,7 @@ code {
 
 /* Literal.Date */
 .highlight .m {
-  color: #0086f7;
+  color: #5680e9;
   font-weight: bold;
 }
 
@@ -1029,12 +1030,12 @@ code {
 
 /* Name.Attribute */
 .highlight .nb {
-  color: #000000;
+  color: #8860d0;
 }
 
 /* Name.Builtin */
 .highlight .nc {
-  color: #000000;
+  color: #8860d0;
 }
 
 /* Name.Class */
@@ -1044,17 +1045,17 @@ code {
 
 /* Name.Constant */
 .highlight .nd {
-  color: #000000;
+  color: #8860d0;
 }
 
 /* Name.Decorator */
 .highlight .ni {
-  color: #000000;
+  color: #8860d0;
 }
 
 /* Name.Entity */
 .highlight .ne {
-  color: #000000;
+  color: #8860d0;
 }
 
 /* Name.Exception */
@@ -1065,33 +1066,33 @@ code {
 
 /* Name.Function */
 .highlight .nl {
-  color: #000000;
+  color: #8860d0;
 }
 
 /* Name.Label */
 .highlight .nn {
-  color: #000000;
+  color: #8860d0;
 }
 
 /* Name.Namespace */
 .highlight .nx {
-  color: #000000;
+  color: #8860d0;
 }
 
 /* Name.Other */
 .highlight .py {
-  color: #000000;
+  color: #8860d0;
 }
 
 /* Name.Property */
 .highlight .nt {
-  color: #fb660a;
+  color: #8860d0;
   font-weight: bold;
 }
 
 /* Name.Tag */
 .highlight .nv {
-  color: #fb660a;
+  color: #8860d0;
 }
 
 /* Name.Variable */
@@ -1106,25 +1107,25 @@ code {
 
 /* Text.Whitespace */
 .highlight .mf {
-  color: #0086f7;
+  color: #5680e9;
   font-weight: bold;
 }
 
 /* Literal.Number.Float */
 .highlight .mh {
-  color: #0086f7;
+  color: #5680e9;
   font-weight: bold;
 }
 
 /* Literal.Number.Hex */
 .highlight .mi {
-  color: #0086f7;
+  color: #5680e9;
   font-weight: bold;
 }
 
 /* Literal.Number.Integer */
 .highlight .mo {
-  color: #0086f7;
+  color: #5680e9;
   font-weight: bold;
 }
 
@@ -1190,22 +1191,22 @@ code {
 
 /* Name.Builtin.Pseudo */
 .highlight .vc {
-  color: #fb660a;
+  color: #8860d0;
 }
 
 /* Name.Variable.Class */
 .highlight .vg {
-  color: #fb660a;
+  color: #8860d0;
 }
 
 /* Name.Variable.Global */
 .highlight .vi {
-  color: #fb660a;
+  color: #8860d0;
 }
 
 /* Name.Variable.Instance */
 .highlight .il {
-  color: #0086f7;
+  color: #5680e9;
   font-weight: bold;
 }
 
@@ -1216,7 +1217,7 @@ code {
 
 summary {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 300;
+  font-weight: 200;
   font-size: 20px;
   text-align: center;
   color: #7F4BF0;
@@ -1235,7 +1236,7 @@ summary::-webkit-details-marker {
 
 summary:before {
   content: '┗ ';
-  color: #7F4BF0;
+  color: #4183C4;
   margin-right: 5px;
 }
 
