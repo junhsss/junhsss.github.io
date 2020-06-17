@@ -93,7 +93,7 @@
 
     <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""
 Note that there will be large degree of redundancy around every code.
-It would be beneficial if you try to distinguish between codes.
+It would be beneficial if you try to point out essential differences between codes.
 All hyperparameters will be tuned minimally.
 """</span>
 <span class="kn">import</span> <span class="nn">gym</span>
@@ -197,7 +197,7 @@ All hyperparameters will be tuned minimally.
 
 <h2 id="닥터-스트레인지">닥터 스트레인지</h2>
 
-<p>여기까지는 좋아보이지만 현실적으로 여러 문제가 있다. REINFORCE에서는 어떤 행동이 얼마나 좋았는지 판단하기 위해 해당 행동 이후에 받은 보상을 전부 더하고 있다. 만약 타임머신을 타고 그 행동을 했던 직후로 돌아갔다고 해 보자. 정확히 같은 행동을 했더라도 미래는 달라진다. 그것도 아주 크게. 발생 가능한 미래는 무한히 많고 우리가 관측한 미래는 그 중 하나에 불과하다. 그래서 행동 교정의 신호로 제공하기에 누적 보상이라는 신호는 매우 불안정하다. 만약 타임머신이 있어서 특정 행동 이후의 미래를 수백, 수천번 관찰할 수 있다면 각 미래들에서 받는 누적 보상들의 평균을 행동 교정의 신호로 제공하면 된다. 그것이 가치 함수이다. 물론 타임머신이 있다 한들 어느 세월에 그러고 있겠느냐만은 아무튼 가능하다면야 그것이 최선이다. 이렇게 써 보자.</p>
+<p>여기까지는 좋아보이지만 현실적으로 여러 문제가 있다. REINFORCE에서는 어떤 행동이 얼마나 좋았는지 판단하기 위해 해당 행동 이후에 받은 보상을 전부 더하고 있다. 만약 타임머신을 타고 그 행동을 했던 직후로 돌아갔다고 해 보자. 정확히 같은 행동을 했더라도 미래는 달라진다. 그것도 아주 크게. 발생 가능한 미래는 무한히 많고 우리가 관측한 미래는 그 중 하나에 불과하다. 그래서 행동 교정의 신호로 제공하기에 누적 보상이라는 신호는 매우 불안정하다. 만약 타임머신이 있어서 특정 행동 이후의 미래를 수천, 수만번 관찰할 수 있다면 각 미래들에서 받는 누적 보상들의 평균을 행동 교정의 신호로 제공하면 된다. 그것이 가치 함수이다. 물론 타임머신이 있다 한들 어느 세월에 그러고 있겠느냐만은 아무튼 가능하다면야 그것이 최선이다. 이렇게 써 보자.</p>
 
 \[\sum_t Q(s_t, a_t) \log \pi_{\theta}(a_t|s_t)\]
 
