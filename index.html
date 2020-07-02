@@ -9,7 +9,9 @@ layout: default
       <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
 
       <div class="entry">
-        {{ post.excerpt | truncatewords: 30, ' ...'}}
+        <a href="{{ site.baseurl }}{{ post.url }}" style="color:#000000;">
+             {{ post.excerpt | truncatewords: 30, ' ...'}}
+        </a>
       </div>
       <!--
       <a href="{{ site.baseurl }}{{ post.url }}" class="read-more"> ... </a>
