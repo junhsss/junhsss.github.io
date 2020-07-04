@@ -1,61 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>강화 학습 이야기 4</title>
-
-        <meta charset="utf-8" />
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
-
-    
-    <meta name="description" content="무언가 이상하다. 가치 함수를 도입했던 이유를 돌이켜보자. 가치 함수는 행위자의 행동이 불러올 미래가 얼마나 좋고 나쁜지 알려준다. 그래서 정책을 계도하는 길잡이의 역할을 맡겼다. 가치 함수는 답답할테다. 가치 함수가 어떤 행동이 좋고 나쁜지 알려주기에 정책이 존재할 이유가 없다. 가치 함수가 이미 정책의 역할을 한다. 별도의 정책은 낭비다.
-" />
-    <meta property="og:description" content="무언가 이상하다. 가치 함수를 도입했던 이유를 돌이켜보자. 가치 함수는 행위자의 행동이 불러올 미래가 얼마나 좋고 나쁜지 알려준다. 그래서 정책을 계도하는 길잡이의 역할을 맡겼다. 가치 함수는 답답할테다. 가치 함수가 어떤 행동이 좋고 나쁜지 알려주기에 정책이 존재할 이유가 없다. 가치 함수가 이미 정책의 역할을 한다. 별도의 정책은 낭비다.
-" />
-    
-    <meta name="author" content="JunHyoung Ryu's Blog" />
-
-    
-    <meta property="og:title" content="강화 학습 이야기 4" />
-    <meta property="twitter:title" content="강화 학습 이야기 4" />
-    
-
-    <!--[if lt IE 9]>
-      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <link rel="stylesheet" type="text/css" href="/style.css" />
-    <link rel="alternate" type="application/rss+xml" title="JunHyoung Ryu's Blog - zero-calorie ideas." href="/feed.xml" />
-
-    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
-  </head>
-
-  <body>
-    <div class="wrapper-masthead">
-      <div class="container">
-        <header class="masthead clearfix">
-          <a href="/" class="site-avatar"><img src="/images/jekyll-logo.png" /></a>
-
-          <div class="site-info">
-            <h1 class="site-name"><a href="/">JunHyoung Ryu's Blog</a></h1>
-            <p class="site-description">zero-calorie ideas.</p>
-          </div>
-
-          <nav>
-            <a href="/about" class="about">About</a>
-          </nav>
-        </header>
-      </div>
-    </div>
-
-    <div id="main" role="main" class="container">
-      <article class="post">
-  <h1>강화 학습 이야기 4</h1>
-
-
-  <div class="entry">
-    <p>무언가 이상하다. 가치 함수를 도입했던 이유를 돌이켜보자. 가치 함수는 행위자의 행동이 불러올 미래가 얼마나 좋고 나쁜지 알려준다. 그래서 정책을 계도하는 길잡이의 역할을 맡겼다. 가치 함수는 답답할테다. 가치 함수가 어떤 행동이 좋고 나쁜지 알려주기에 정책이 존재할 이유가 없다. 가치 함수가 이미 정책의 역할을 한다. 별도의 정책은 낭비다.</p>
+I"��<p>무언가 이상하다. 가치 함수를 도입했던 이유를 돌이켜보자. 가치 함수는 행위자의 행동이 불러올 미래가 얼마나 좋고 나쁜지 알려준다. 그래서 정책을 계도하는 길잡이의 역할을 맡겼다. 가치 함수는 답답할테다. 가치 함수가 어떤 행동이 좋고 나쁜지 알려주기에 정책이 존재할 이유가 없다. 가치 함수가 이미 정책의 역할을 한다. 별도의 정책은 낭비다.</p>
 
 <p>가치 함수가 정책의 역할을 대체하는 한 가지 각본은 이렇다. \(\pi\)는 모르나 \(Q^{\pi}\)를 안다고 해보자. 정책을 모르니 가치 함수만으로 해야할 행동을 골라야 한다. 상황 \(s\)에 놓여 있다면 \(Q^{\pi}(s, \cdot \ )\)에 가능한 행동들을 넣어보자. 그 중 \(Q^{\pi}\)를 가장 크게 만드는 행동을 선택한다면 어떨까? 언뜻 말이 되는 규범처럼 보인다. 그러나 사실 어딘가 어색하다. 이런 의문들이 들어야 한다.</p>
 
@@ -332,19 +275,19 @@
 
 <h2 id="벽돌-파괴자">벽돌 파괴자</h2>
 
-<p>Off-Policy라는 성질은 우리를 구속하던 많은 제약을 파괴한다. 더 자유로운 알고리즘 디자인을 가능케 한다. 구현을 자세히 논하려는 요량은 아니나 어떤 구현이 정석에 가까운지 짚고 넘어갈 가치는 있다. 구현 이슈가 자주 발생하는 강화 학습이기에 더 그렇다. 달갑지 않지만 손을 더럽혀보자.</p>
+<p>Off-Policy라는 성질은 우리를 많은 제약에서 해방시킨다. 여러 장벽을 파괴하며 보다 자유로운 알고리즘 디자인을 가능케 한다. 그러니 구현의 자유도가 높아진다. 구현을 자세히 논하려는 요량은 아니나 어떤 구현이 정석에 가까운지 짚고 넘어갈 가치는 있다. 구현 이슈가 자주 발생하는 강화 학습이기에 더 그렇다. 달갑지 않지만 손을 더럽혀보자.</p>
 
-<p>먼저 데이터를 한 번 사용하고 버리는것은 효율적이지 못하다. Off-Policy라는 성질 덕에 같은 데이터로 여러 번 학습해도 문제가 되지 않는다. 가장 대중적인 구현은 이렇다. 큰 데이터베이스를 만들어 놓곤 데이터를 차곡 차곡 쌓아놓는다. 학습을 할 때는 데이터베이스에서 무작위로 한 움큼 뽑아와 사용한다. 이런 저장소를 Replay Buffer라 부른다. 새로운 데이터는 들어오고 오래된 데이터는 빠지도록 설계한다. 그러니 덱 구조가 자연스럽다.</p>
+<p>먼저 데이터를 한 번 사용하고 버리는것은 효율적이지 못하다. Off-Policy이기에 버릴 이유가 없다. 그래서 큰 데이터베이스를 만들어 놓곤 데이터를 차곡 차곡 쌓아놓는다. 학습을 할 때는 데이터베이스에서 무작위로 한 움큼 뽑아와 사용한다. 이런 데이터베이스를 Replay Buffer라 부른다. 새로운 데이터는 들어오고 오래된 데이터는 빠지도록 설계한다. 그러니 덱 구조가 자연스럽다.</p>
 
-<p>Replay Buffer를 도입하면 데이터를 효율적으로 사용하게 될 뿐더러 부수적인 이점까지 생긴다. 한 번 학습할 때마다 데이터들을 무작위로 뽑아 사용하니 매번 다양한 경험으로 학습한다. 학습이 더 빨라지며 안정된다. (사족: 정량적으로는 배치를 구성하는 데이터들의 종속성을 깨어 주어 분산을 낮춘다고 해석하자.) Replay Buffer를 개선하려는 <a href="https://arxiv.org/abs/1511.05952">여</a>러 <a href="https://arxiv.org/pdf/1707.01495.pdf">시</a>도<a href="https://arxiv.org/pdf/1803.00933.pdf">들</a>이 <a href="https://arxiv.org/pdf/1712.01275.pdf">있</a>다.</p>
+<p>Replay Buffer를 도입하면 데이터를 효율적으로 사용하게 될 뿐더러 부수적인 이점까지 생긴다. 한 번 학습할 때마다 데이터들을 무작위로 뽑아 사용하니 매번 다양한 경험으로 학습한다. 학습이 더 빨라지며 안정된다. (사족: 배치를 구성하는 데이터들의 종속성을 깨어 주어 분산을 낮춘다는 말이다.) Replay Buffer를 개선하려는 <a href="https://arxiv.org/abs/1511.05952">여</a>러 <a href="https://arxiv.org/pdf/1707.01495.pdf">시</a>도<a href="https://arxiv.org/pdf/1803.00933.pdf">들</a>이 <a href="https://arxiv.org/pdf/1712.01275.pdf">있</a>다.</p>
 
-<p>다음은 데이터 수집에 대한 논의다. 어떤 정책이 모은 데이터로도 학습이 가능하기에 수집이 대단히 자유로워졌다. 이전 코드에서는 무작위 정책에게 수집을 맡겼다. 그러나 무작위로 행동하는 정책이 수집한 데이터는 품질이 좋지 못할테다. 아무리 Off-Policy라 할지라도 무에서 유를 창조할 수는 없다. 공짜 점심은 없다. 당연히 좋은 품질의 데이터로 학습할 때 더 좋은 결과를 낸다.</p>
+<p>다음은 데이터 수집에 대한 논의다. 데이터 수집이 대단히 자유로워졌다. 어떤 정책을 가지고 수집한 데이터라도 괜찮다. 이전 코드에서는 무작위 정책에게 수집을 맡겼다. 그러나 무작위로 행동하는 정책이 수집한 데이터는 품질이 좋지 못할테다. 아무리 Off-Policy라 할지라도 무에서 유를 창조할 수는 없다. 공짜 점심은 없다. 당연히 좋은 품질의 데이터로 학습할 때 더 좋은 결과를 낸다.</p>
 
 <p>가령 외부 컨트롤러를 연결해 독자들이 직접 데이터를 수집해도 된다. 품질은 확보가 될테지만 Scalable 하지는 못하다. 심지어 높은 품질의 데이터를 모으기 위한 제 3의 정책을 훈련시켜도 된다. 정말로 자유다.</p>
 
 <p>자연스럽고 값 싼 후보가 있다. 학습 중인 가치 함수다. 가치 함수의 학습이 잘 진행된다면 최적 정책의 가치 함수와 한층 가까워질테다. 이 가치 함수로 행동하면 무작위로 행동할 때보다 더 높은 품질의 데이터를 확보할 수 있다. 그렇게 모은 데이터로 더 나은 학습을 꾀한다. 물론 On-Policy에서도 학습 중인 정책으로 데이터를 수집한다. 그러나 Off-Policy에서는 필수가 아닌 한 가지 자연스러운 선택에 불과하다.</p>
 
-<p>그러나 첫 이야기에서 논했던 문제가 다시금 떠오른다. 학습 주체에게 데이터 수집을 맡겨버리면 당연히 학습 주체가 선호하는 데이터들이 수집된다. 학습 주체가 아직 영리하지 못하다면 우물안 개구리가 되어버리기 쉽다. 그래서 역설적이게도 일정 수준의 무작위성을 부여해 준다. 무작위 정책과 학습 중인 정책을 내삽해 새로운 정책을 만든다. Off-Policy이기에 이렇게 섞인 정책으로 데이터를 수집해도 괜찮다. 이를 \(\epsilon\)-greedy라 부른다. \(\epsilon\)의 확률로 무작위 행동을 한다. 풍부한 경험을 모으기 위해 무작위성에 의존한다. 우아함이라곤 찾아볼 수 없으나 어쨌든 작동은 한다.</p>
+<p>그러나 첫 이야기에서 논했던 문제가 다시금 떠오른다. 학습 주체에게 데이터 수집을 맡겨버리면 당연히 학습 주체가 선호하는 데이터들이 수집된다. 학습 주체가 아직 영리하지 않다면 우물안 개구리가 되어버릴 위험이 크다. 그래서 역설적이게도 일정 수준의 무작위성을 부여해 준다. 무작위 정책과 학습 중인 정책을 내삽해 새로운 정책을 만든다. Off-Policy이기에 이렇게 섞인 정책으로 데이터를 수집해도 괜찮다. \(\epsilon\)-greedy라 부른다. \(\epsilon\)의 확률로 무작위 행동을 한다. 우아함이라곤 찾아볼 수 없으나 어쨌든 작동은 한다.</p>
 
 <p>여기서부터 코드의 구조가 달라진다. 여유를 갖고 찬찬히 뜯어보기를 권장한다.</p>
 
@@ -376,8 +319,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
 
-<span class="c1"># Create a buffer that we discussed.
-</span><span class="k">class</span> <span class="nc">ReplayBuffer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">ReplayBuffer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
         <span class="bp">self</span><span class="p">.</span><span class="n">memory</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="n">maxlen</span><span class="p">)</span>
     
@@ -413,8 +355,7 @@
     <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
         <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="c1"># Collect data with the epsilon-greedy policy
-</span>        <span class="k">if</span> <span class="n">random</span><span class="p">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">EPSILON</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">random</span><span class="p">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">EPSILON</span><span class="p">:</span>
             <span class="n">chosen_action</span> <span class="o">=</span> <span class="n">random</span><span class="p">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">chosen_action</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">to_tensor</span><span class="p">(</span><span class="n">state</span><span class="p">)).</span><span class="n">argmax</span><span class="p">().</span><span class="n">item</span><span class="p">()</span>
@@ -428,15 +369,12 @@
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">buffer</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">BATCH_SIZE</span><span class="p">:</span>
         <span class="k">continue</span>
 
-    <span class="c1"># Train with the sampled data.
-</span>    <span class="n">batch</span> <span class="o">=</span> <span class="nb">buffer</span><span class="p">.</span><span class="n">sample</span><span class="p">(</span><span class="n">BATCH_SIZE</span><span class="p">)</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="nb">buffer</span><span class="p">.</span><span class="n">sample</span><span class="p">(</span><span class="n">BATCH_SIZE</span><span class="p">)</span>
     <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s">'states'</span><span class="p">]).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch</span><span class="p">[</span><span class="s">'actions'</span><span class="p">])</span>
 
-    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span>
-        <span class="n">augmented_next_actions</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s">'next_states'</span><span class="p">]).</span><span class="n">argmax</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-        <span class="n">target</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s">'rewards'</span><span class="p">]</span> <span class="o">+</span> <span class="n">q</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s">'next_states'</span><span class="p">]).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">augmented_next_actions</span><span class="p">)</span> <span class="o">*</span> <span class="n">GAMMA</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">batch</span><span class="p">[</span><span class="s">'dones'</span><span class="p">])</span>
-    
-    <span class="n">loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">target</span><span class="p">).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">augmented_next_actions</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s">'next_states'</span><span class="p">]).</span><span class="n">argmax</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s">'rewards'</span><span class="p">]</span> <span class="o">+</span> <span class="n">q</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s">'next_states'</span><span class="p">]).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">augmented_next_actions</span><span class="p">)</span> <span class="o">*</span> <span class="n">GAMMA</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">batch</span><span class="p">[</span><span class="s">'dones'</span><span class="p">])</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">target</span><span class="p">.</span><span class="n">detach</span><span class="p">()).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
     
     <span class="n">optimizer</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
     <span class="n">loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
@@ -520,9 +458,7 @@
                   <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(),</span>
                   <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">HIDDEN_DIM</span><span class="p">,</span> <span class="n">ACTION_DIM</span><span class="p">))</span>
 
-<span class="c1"># Create the target Network
-# You must DEEP copy it since it's a different object.
-</span><span class="n">q_target</span> <span class="o">=</span> <span class="n">copy</span><span class="p">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="n">q_target</span> <span class="o">=</span> <span class="n">copy</span><span class="p">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
 
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span> <span class="o">=</span> <span class="n">LEARNING_RATE</span><span class="p">)</span>
 <span class="nb">buffer</span> <span class="o">=</span> <span class="n">ReplayBuffer</span><span class="p">(</span><span class="n">BUFFER_SIZE</span><span class="p">)</span>
@@ -551,20 +487,15 @@
     <span class="n">batch</span> <span class="o">=</span> <span class="nb">buffer</span><span class="p">.</span><span class="n">sample</span><span class="p">(</span><span class="n">BATCH_SIZE</span><span class="p">)</span>
     <span class="n">expected_state_action_values</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s">'states'</span><span class="p">]).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch</span><span class="p">[</span><span class="s">'actions'</span><span class="p">])</span>
 
-    <span class="c1"># Use the target network to calculate targets.
-</span>    <span class="c1"># It stabilizes the whole learning process.
-</span>    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">no_grad</span><span class="p">():</span>
-        <span class="n">augmented_next_actions</span> <span class="o">=</span> <span class="n">q_target</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s">'next_states'</span><span class="p">]).</span><span class="n">argmax</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-        <span class="n">target</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s">'rewards'</span><span class="p">]</span> <span class="o">+</span> <span class="n">q_target</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s">'next_states'</span><span class="p">]).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">augmented_next_actions</span><span class="p">)</span> <span class="o">*</span> <span class="n">GAMMA</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">batch</span><span class="p">[</span><span class="s">'dones'</span><span class="p">])</span>
-    
-    <span class="n">loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">target</span><span class="p">).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">augmented_next_actions</span> <span class="o">=</span> <span class="n">q_target</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s">'next_states'</span><span class="p">]).</span><span class="n">argmax</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s">'rewards'</span><span class="p">]</span> <span class="o">+</span> <span class="n">q_target</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s">'next_states'</span><span class="p">]).</span><span class="n">gather</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">augmented_next_actions</span><span class="p">)</span> <span class="o">*</span> <span class="n">GAMMA</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">batch</span><span class="p">[</span><span class="s">'dones'</span><span class="p">])</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_state_action_values</span> <span class="o">-</span> <span class="n">target</span><span class="p">.</span><span class="n">detach</span><span class="p">()).</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
     
     <span class="n">optimizer</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
     <span class="n">loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
     <span class="n">optimizer</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
 
-    <span class="c1"># Update the target network occasionally.
-</span>    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">TARGET_UPDATE_CNT</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">TARGET_UPDATE_CNT</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">q_target</span><span class="p">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">state_dict</span><span class="p">())</span>
 
     <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -711,88 +642,4 @@
 <h2 id="로그아웃">로그아웃</h2>
 
 <p>이 이야기들의 목표는 ‘환경과 상호 작용이 불가능한 상황에서 누군가가 만들어 놓은 데이터로 학습하는 방법론’, 즉 오프라인 강화 학습이다. 정의상 필연적으로 Off-Policy여야만 한다. 아니 잠깐, 어떤 방법론이 Off-Policy라면 다른 정책이 만들어낸 데이터로 학습이 가능하다고 했다. 그러면 목표를 벌써 달성한 셈 아닌가? 그러면 좋겠다만 현실은 녹록치 않다. 작금의 Off-Policy 방법론들은 ‘환경과 상호 작용이 가능한 상황에서 누군가가 만들어 놓은 데이터로 학습하는 방법론’에 가깝다. 그러니 아직은 오프라인이 아닌 온라인이다. 남은 퍼즐 조각들을 맞춰보자. 안전한 로그아웃을 위해.</p>
-
-  </div>
-
-  <div class="date">
-    20년 6월의 기록
-  </div>
-
-
-  
-<div class="comments">
-	<div id="disqus_thread"></div>
-	<script type="text/javascript">
-
-	    var disqus_shortname = 'junhsss-github-io';
-
-	    (function() {
-	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	    })();
-
-	</script>
-	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-
-
-  
-    <div id="disqus_thread"></div>
-    <script>
-
-      /**
-      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-      var disqus_config = function () {
-        this.page.url = "http://localhost:4000/rl-story-4/";
-        this.page.identifier = "강화 학습 이야기 4";
-      };
-
-      (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = 'https://junhsss-github-io.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                                
-  
-</article>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-    </div>
-    <!--
-    <div class="wrapper-footer">
-      <div class="container">
-        <footer class="footer">
-          
-
-
-
-<a href="https://github.com/barryclark/jekyll-now"><i class="svg-icon github"></i></a>
-
-
-
-
-<a href="https://www.twitter.com/jekyllrb"><i class="svg-icon twitter"></i></a>
-
-
-
-        </footer>
-      </div>
-    </div>
-    -->
-
-    
-
-  </body>
-</html>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+:ET
