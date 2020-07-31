@@ -25,7 +25,7 @@ permalink: /about/
   - SARSA
   - Q-Learning
   - DQN
-- [강화 학습 이야기 5]({% post_url 2020-7-31-rl-story-5 %})
+- [강화 학습 이야기 5]({% post_url 2020-7-25-rl-story-5 %})
   - Maximization Bias
   - Double DQN (DDQN)
   - Batch Constraint Q-Learning
