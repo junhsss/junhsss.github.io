@@ -1,12 +1,27 @@
 ---
-layout: page
-title: About
+layout: about
+title: Posts
 permalink: /about/
 ---
+## 강화학습
 
-떠오르는 생각들을 적습니다.
+- [강화 학습 이야기 1]({% post_url 2020-5-31-rl-story-1 %})
+  - Policy Gradient
+  - REINFORCE
+- [강화 학습 이야기 2]({% post_url 2020-6-2-rl-story-2 %})
+  - Value Functions
+  - A2C
+- [강화 학습 이야기 3]({% post_url 2020-6-3-rl-story-3 %})
+  - Temporal Difference Learning
+  - Discount Factor
+  - Variance Reduction
+- [강화 학습 이야기 4]({% post_url 2020-6-4-rl-story-4 %})
+  - SARSA
+  - Q-Learning
+  - DQN
+- [강화 학습 이야기 5]({% post_url 2020-7-31-rl-story-5 %})
+  - Maximization Bias
+  - Double DQN (DDQN)
+  - Batch Constraint Q-Learning
 
 
-[facebook.com/zerocalorieideas](https://facebook.com/zerocalorieideas)
-
-[junhsssr@gmail.com](mailto:junhsssr@gmail.com)
