@@ -4,9 +4,10 @@ title: Posts
 permalink: /about/
 ---
 
-## 
-nh
-[페이스북 페이지](https://www.facebook.com/zerocalorieideas)
+## 연락처
+
+- [페이스북 페이지](https://www.facebook.com/zerocalorieideas)
+- junhsssr@gmail.com
 
 ## 강화학습
 
@@ -24,4 +25,9 @@ nh
   - SARSA
   - Q-Learning
   - DQN
+- [강화 학습 이야기 5]({% post_url 2020-7-31-rl-story-5 %})
+  - Maximization Bias
+  - Double DQN (DDQN)
+  - Batch Constraint Q-Learning
+
 
