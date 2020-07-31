@@ -3,6 +3,11 @@ layout: about
 title: Posts
 permalink: /about/
 ---
+
+## Contact 
+
+[페이스북 페이지](https://www.facebook.com/zerocalorieideas)
+
 ## 강화학습
 
 - [강화 학습 이야기 1]({% post_url 2020-5-31-rl-story-1 %})

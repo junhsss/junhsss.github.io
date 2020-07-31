@@ -1,0 +1,43 @@
+I"�<h2 id="contact">Contact</h2>
+
+<p><a href="https://www.facebook.com/zerocalorieideas">페이스북 페이지</a></p>
+
+<h2 id="강화학습">강화학습</h2>
+
+<ul>
+  <li><a href="/rl-story-1/">강화 학습 이야기 1</a>
+    <ul>
+      <li>Policy Gradient</li>
+      <li>REINFORCE</li>
+    </ul>
+  </li>
+  <li><a href="/rl-story-2/">강화 학습 이야기 2</a>
+    <ul>
+      <li>Value Functions</li>
+      <li>A2C</li>
+    </ul>
+  </li>
+  <li><a href="/rl-story-3/">강화 학습 이야기 3</a>
+    <ul>
+      <li>Temporal Difference Learning</li>
+      <li>Discount Factor</li>
+      <li>Variance Reduction</li>
+    </ul>
+  </li>
+  <li><a href="/rl-story-4/">강화 학습 이야기 4</a>
+    <ul>
+      <li>SARSA</li>
+      <li>Q-Learning</li>
+      <li>DQN</li>
+    </ul>
+  </li>
+  <li><a href="/rl-story-5/">강화 학습 이야기 5</a>
+    <ul>
+      <li>Maximization Bias</li>
+      <li>Double DQN (DDQN)</li>
+      <li>Batch Constraint Q-Learning</li>
+    </ul>
+  </li>
+</ul>
+
+:ET
