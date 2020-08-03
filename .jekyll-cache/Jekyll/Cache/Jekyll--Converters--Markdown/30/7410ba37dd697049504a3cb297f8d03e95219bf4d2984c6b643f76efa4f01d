@@ -1,61 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>강화 학습 이야기 3</title>
-
-        <meta charset="utf-8" />
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
-
-    
-    <meta name="description" content="가치 함수에는 강한 재귀적 구조가 존재한다. 못 보고 지나치면 내 손해, 아니 CPU 손해다. 심미적 낭비기도 하다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.
-" />
-    <meta property="og:description" content="가치 함수에는 강한 재귀적 구조가 존재한다. 못 보고 지나치면 내 손해, 아니 CPU 손해다. 심미적 낭비기도 하다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.
-" />
-    
-    <meta name="author" content="JunHyoung Ryu's Blog" />
-
-    
-    <meta property="og:title" content="강화 학습 이야기 3" />
-    <meta property="twitter:title" content="강화 학습 이야기 3" />
-    
-
-    <!--[if lt IE 9]>
-      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <link rel="stylesheet" type="text/css" href="/style.css" />
-    <link rel="alternate" type="application/rss+xml" title="JunHyoung Ryu's Blog - zero-calorie ideas." href="/feed.xml" />
-
-    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
-  </head>
-
-  <body>
-    <div class="wrapper-masthead">
-      <div class="container">
-        <header class="masthead clearfix">
-          <a href="/" class="site-avatar"><img src="/images/jekyll-logo.png" /></a>
-
-          <div class="site-info">
-            <h1 class="site-name"><a href="/">JunHyoung Ryu's Blog</a></h1>
-            <p class="site-description">zero-calorie ideas.</p>
-          </div>
-
-          <nav>
-            <a href="/about" class="about">About</a>
-          </nav>
-        </header>
-      </div>
-    </div>
-
-    <div id="main" role="main" class="container">
-      <article class="post">
-  <h1>강화 학습 이야기 3</h1>
-
-
-  <div class="entry">
-    <p>가치 함수에는 강한 재귀적 구조가 존재한다. 못 보고 지나치면 내 손해, 아니 CPU 손해다. 심미적 낭비기도 하다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.</p>
+I"�<p>가치 함수에는 강한 재귀적 구조가 존재한다. 못 보고 지나치면 내 손해, 아니 CPU 손해다. 심미적 낭비기도 하다. 가치 함수의 아름다움을 존중하는 알고리즘이 필요하다.</p>
 
 <p>상황에 대한 가치함수 \(V^{\pi}\)를 생각해보자. 행위자가 상황 \(s\)에서 행동 \(a\)를 하면 보상 \(r\)를 받고 \(s'\)라는 상황에 놓인다. 원래 상황의 가치 \(V^{\pi}(s)\)와 바뀐 상황의 가치 \(V^{\pi}(s')\) 사이에는 어떤 관계가 존재할까? 두 상태가 시간적으로 매우 가까우므로 크게 다르다면 어색하다. 현재 상황에서 보상 \(r\)을 받고 다음 상황 \(s'\)로 넘어갔으니 이렇게 쓸 수 있다.</p>
 
@@ -378,7 +321,7 @@
   </div>
 </details>
 
-<p>정책 \(\pi\)가 개입한 흔적은 데이터 \(a'\)에서 드러난다. \(s'\)에서 \(a'\)를 선택한 주체가 \(\pi\)여야  \(Q^{\pi}\)를 추정하는 셈이 된다. 지난 이야기에서 꼼꼼히 따져 봤다. \(Q^{\pi}\)를 시간차 학습으로 추정하는 논리를 명확히 이해하자. 이후 이야기들의 주인공이다.</p>
+<p>이후 이야기들의 뼈대가 된다. 정책 \(\pi\)가 개입한 흔적은 데이터 \(a'\)에서 드러난다. \(s'\)에서 \(a'\)를 선택한 주체가 \(\pi\)여야  \(Q^{\pi}\)를 추정하는 셈이 된다. 지난 이야기에서 꼼꼼히 따져 봤다. \(Q^{\pi}\)를 시간차 학습으로 추정하는 논리를 유심히 관찰해두자.</p>
 
 <h2 id="파블로프의-개">파블로프의 개</h2>
 
@@ -519,88 +462,4 @@ Everything is identical but the discount factor.
 
   </div>
 </details>
-
-  </div>
-
-  <div class="date">
-    20년 6월 3일의 기록
-  </div>
-
-
-  
-<div class="comments">
-	<div id="disqus_thread"></div>
-	<script type="text/javascript">
-
-	    var disqus_shortname = 'junhsss-github-io';
-
-	    (function() {
-	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	    })();
-
-	</script>
-	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-
-
-  
-    <div id="disqus_thread"></div>
-    <script>
-
-      /**
-      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-      var disqus_config = function () {
-        this.page.url = "http://localhost:4000/rl-story-3/";
-        this.page.identifier = "강화 학습 이야기 3";
-      };
-
-      (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = 'https://junhsss-github-io.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                                
-  
-</article>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-    </div>
-    <!--
-    <div class="wrapper-footer">
-      <div class="container">
-        <footer class="footer">
-          
-
-
-
-<a href="https://github.com/barryclark/jekyll-now"><i class="svg-icon github"></i></a>
-
-
-
-
-<a href="https://www.twitter.com/jekyllrb"><i class="svg-icon twitter"></i></a>
-
-
-
-        </footer>
-      </div>
-    </div>
-    -->
-
-    
-
-  </body>
-</html>
-
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+:ET
